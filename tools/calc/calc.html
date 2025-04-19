@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Calculator</title>
+        <link rel="stylesheet" href="calc.css">
+    </head>
+    <body>
+        <header>
+            <h1>Calculator</h1>
+            <button id="back-to-home">Back to home</button>
+        </header>
+        <main>
+            <section class="calculator">
+                <div class="display">
+                    <input type="text" id="result" readonly>
+                </div>
+                <div class="buttons">
+                    <button class="btn operator">(</button>
+                    <button class="btn operator">)</button>
+                    <button class="btn operator">√</button>
+                    <button class="btn operator">^</button>
+                    <button class="btn">7</button>
+                    <button class="btn">8</button>
+                    <button class="btn">9</button>
+                    <button class="btn operator">÷</button>
+                    <button class="btn">4</button>
+                    <button class="btn">5</button>
+                    <button class="btn">6</button>
+                    <button class="btn operator">×</button>
+                    <button class="btn">1</button>
+                    <button class="btn">2</button>
+                    <button class="btn">3</button>
+                    <button class="btn operator">-</button>
+                    <button class="btn">0</button>
+                    <button class="btn">.</button>
+                    <button class="btn clear">C</button>
+                    <button class="btn operator">+</button>
+                    <button class="btn equals">=</button>
+                </div>
+            </section>
+            <section class="history">
+                <h2>Historia obliczeń</h2>
+                <div class="history-list">
+                    <!-- Historia będzie dodawana dynamicznie przez JavaScript -->
+                </div>
+                <button id="clear-history" class="clear">Wyczyść historię</button>
+            </section>
+        </main>
+        <script src="calc.js"></script>
+    </body>
+</html>

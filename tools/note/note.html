@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notatnik</title>
+    <link rel="stylesheet" href="note.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>Notatnik</h1>
+        <button id="back-to-home" class="back-home-btn">Powrót do strony głównej</button>
+    </header>
+    <main>
+        <section class="note-input">
+            <textarea id="new-note" maxlength="1000" placeholder="Wpisz swoją notatkę (obsługa MarkDown)..."></textarea>
+            <div class="note-controls">
+                <label for="note-color">Kolor:</label>
+                <input type="color" id="note-color" value="#fff9c4">
+                <label for="note-font">Czcionka:</label>
+                <select id="note-font">
+                    <option value="Roboto">Roboto</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                </select>
+                <button id="add-note"><i class="fa fa-plus"></i> Dodaj notatkę</button>
+            </div>
+        </section>
+        <section class="note-actions">
+            <button id="clear-all" class="clear-all"><i class="fa fa-trash"></i> Usuń wszystkie notatki</button>
+            <button id="sort-notes" class="sort-notes"><i class="fa fa-sort"></i> Zmień kolejność</button>
+        </section>
+        <section class="note-list">
+            <ul id="notes"></ul>
+        </section>
+    </main>
+    <footer>
+        <span>Notatnik NozerTools &copy; 2025</span>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="note.js"></script>
+</body>
+</html>
