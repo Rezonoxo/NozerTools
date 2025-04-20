@@ -15,49 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('notes', JSON.stringify(notes));
     }
 
-    function showEditModal(idx) {
-        // Tworzenie modala
-        let modal = document.createElement('div');
-        modal.className = 'edit-modal';
-        modal.innerHTML = `
-            <div class="edit-modal-content">
-                <h3>Edytuj notatkę</h3>
-                <textarea id="edit-note-text" maxlength="1000">${notes[idx].text.replace(/</g, '&lt;')}</textarea>
-                <div class="edit-modal-actions">
-                    <button id="save-edit">Zapisz</button>
-                    <button id="cancel-edit">Anuluj</button>
-                    <span class="edit-char-count">0/1000</span>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-        const textarea = modal.querySelector('#edit-note-text');
-        const charCount = modal.querySelector('.edit-char-count');
-        charCount.textContent = textarea.value.length + '/1000';
-        textarea.oninput = () => {
-            if (textarea.value.length > 1000) textarea.value = textarea.value.slice(0, 1000);
-            charCount.textContent = textarea.value.length + '/1000';
-        };
-        // Zatrzymaj propagację kliknięcia na input[type=color] w modalu
-        const colorInput = modal.querySelector('input[type="color"]');
-        if (colorInput) {
-            colorInput.addEventListener('mousedown', e => e.stopPropagation());
-            colorInput.addEventListener('click', e => e.stopPropagation());
-        }
-        modal.querySelector('#save-edit').onclick = () => {
-            const newText = textarea.value.trim();
-            if (newText && newText.length <= 1000) {
-                notes[idx].text = newText;
-                saveNotes();
-                renderNotes();
-                document.body.removeChild(modal);
-            }
-        };
-        modal.querySelector('#cancel-edit').onclick = () => {
-            document.body.removeChild(modal);
-        };
-    }
-
     function renderNotes() {
         notesList.innerHTML = '';
         notes.forEach((note, idx) => {
@@ -66,44 +23,84 @@ document.addEventListener('DOMContentLoaded', () => {
             li.style.fontFamily = note.font;
             li.setAttribute('draggable', 'true');
             li.dataset.index = idx;
-            li.innerHTML = `
-                <div class="note-date">${note.date}</div>
-                <div class="note-content">${marked.parse(note.text)}</div>
-                <div class="note-actions">
-                    <input type="color" class="color-picker" value="${note.color}" title="Zmień kolor">
-                    <select class="font-picker" title="Zmień czcionkę">
-                        <option value="Roboto"${note.font === 'Roboto' ? ' selected' : ''}>Roboto</option>
-                        <option value="Arial"${note.font === 'Arial' ? ' selected' : ''}>Arial</option>
-                        <option value="Georgia"${note.font === 'Georgia' ? ' selected' : ''}>Georgia</option>
-                        <option value="Courier New"${note.font === 'Courier New' ? ' selected' : ''}>Courier New</option>
-                        <option value="Times New Roman"${note.font === 'Times New Roman' ? ' selected' : ''}>Times New Roman</option>
-                    </select>
-                    <button class="edit-note" title="Edytuj notatkę"><i class="fa fa-edit"></i></button>
-                    <button class="delete-note" title="Usuń notatkę"><i class="fa fa-trash"></i></button>
-                </div>
-            `;
-            // Delete note
-            li.querySelector('.delete-note').onclick = () => {
-                notes.splice(idx, 1);
-                saveNotes();
-                renderNotes();
-            };
-            // Edit note
-            li.querySelector('.edit-note').onclick = () => {
-                showEditModal(idx);
-            };
-            // Change color
-            li.querySelector('.color-picker').oninput = (e) => {
-                notes[idx].color = e.target.value;
-                saveNotes();
-                renderNotes();
-            };
-            // Change font
-            li.querySelector('.font-picker').onchange = (e) => {
-                notes[idx].font = e.target.value;
-                saveNotes();
-                renderNotes();
-            };
+            // Inline edycja
+            if (note.editing) {
+                li.innerHTML = `
+                    <div class="note-date">${note.date}</div>
+                    <textarea class="edit-note-text" maxlength="1000">${note.text}</textarea>
+                    <div class="note-actions">
+                        <input type="color" class="color-picker" value="${note.color}" title="Zmień kolor">
+                        <select class="font-picker" title="Zmień czcionkę">
+                            <option value="Roboto"${note.font === 'Roboto' ? ' selected' : ''}>Roboto</option>
+                            <option value="Arial"${note.font === 'Arial' ? ' selected' : ''}>Arial</option>
+                            <option value="Georgia"${note.font === 'Georgia' ? ' selected' : ''}>Georgia</option>
+                            <option value="Courier New"${note.font === 'Courier New' ? ' selected' : ''}>Courier New</option>
+                            <option value="Times New Roman"${note.font === 'Times New Roman' ? ' selected' : ''}>Times New Roman</option>
+                        </select>
+                        <button class="save-edit"><i class="fa fa-check"></i> Zapisz</button>
+                        <button class="cancel-edit"><i class="fa fa-times"></i> Anuluj</button>
+                    </div>
+                `;
+                li.querySelector('.save-edit').onclick = () => {
+                    const newText = li.querySelector('.edit-note-text').value.trim();
+                    if (newText && newText.length <= 1000) {
+                        note.text = newText;
+                        note.editing = false;
+                        saveNotes();
+                        renderNotes();
+                    }
+                };
+                li.querySelector('.cancel-edit').onclick = () => {
+                    note.editing = false;
+                    renderNotes();
+                };
+                li.querySelector('.color-picker').oninput = (e) => {
+                    note.color = e.target.value;
+                    saveNotes();
+                    renderNotes();
+                };
+                li.querySelector('.font-picker').onchange = (e) => {
+                    note.font = e.target.value;
+                    saveNotes();
+                    renderNotes();
+                };
+            } else {
+                li.innerHTML = `
+                    <div class="note-date">${note.date}</div>
+                    <div class="note-content">${marked.parse(note.text)}</div>
+                    <div class="note-actions">
+                        <input type="color" class="color-picker" value="${note.color}" title="Zmień kolor">
+                        <select class="font-picker" title="Zmień czcionkę">
+                            <option value="Roboto"${note.font === 'Roboto' ? ' selected' : ''}>Roboto</option>
+                            <option value="Arial"${note.font === 'Arial' ? ' selected' : ''}>Arial</option>
+                            <option value="Georgia"${note.font === 'Georgia' ? ' selected' : ''}>Georgia</option>
+                            <option value="Courier New"${note.font === 'Courier New' ? ' selected' : ''}>Courier New</option>
+                            <option value="Times New Roman"${note.font === 'Times New Roman' ? ' selected' : ''}>Times New Roman</option>
+                        </select>
+                        <button class="edit-note" title="Edytuj notatkę"><i class="fa fa-edit"></i></button>
+                        <button class="delete-note" title="Usuń notatkę"><i class="fa fa-trash"></i></button>
+                    </div>
+                `;
+                li.querySelector('.edit-note').onclick = () => {
+                    note.editing = true;
+                    renderNotes();
+                };
+                li.querySelector('.delete-note').onclick = () => {
+                    notes.splice(idx, 1);
+                    saveNotes();
+                    renderNotes();
+                };
+                li.querySelector('.color-picker').oninput = (e) => {
+                    note.color = e.target.value;
+                    saveNotes();
+                    renderNotes();
+                };
+                li.querySelector('.font-picker').onchange = (e) => {
+                    note.font = e.target.value;
+                    saveNotes();
+                    renderNotes();
+                };
+            }
             // Drag & drop events
             li.addEventListener('dragstart', (e) => {
                 li.classList.add('dragging');

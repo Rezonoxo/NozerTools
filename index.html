@@ -3,35 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NozerTools</title>
+    <title>NozerTools - Profesjonalne Narzędzia Online</title>
+    <meta name="description" content="Zestaw profesjonalnych narzędzi online dla developerów i nie tylko">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>NozerTools</h1>
-        <p>Zestaw prostych narzędzi od NozerCode</p>
-        <button id="theme-toggle" aria-label="Przełącz motyw">🌙</button>
-    </header>
-    <main>
-        <div class="grid-container">
-            <div class="project-card" onclick="window.location.href='/tools/todo/todo.html'">
-                <div class="icon">📝</div>
-                <h2>Lista zadań</h2>
-            </div>
-            <div class="project-card" onclick="window.location.href='/tools/note/note.html'">
-                <div class="icon">🗒️</div>
-                <h2>Notatnik</h2>
-            </div>
-            <div class="project-card" onclick="window.location.href='/tools/calc/calc.html'">
-                <div class="icon">🧮</div>
-                <h2>Kalkulator</h2>
-            </div>
-            <div class="project-card" onclick="window.location.href='world-clock.html'">
-                <div class="icon">🕒</div>
-                <h2>Zegar światowy</h2>
+        <div class="header-container">
+            <h1>Nozer<span>Tools</span></h1>
+            <p class="subtitle">Profesjonalne narzędzia online dla developerów</p>
+            <div class="header-actions">
+                <button id="theme-toggle" aria-label="Przełącz motyw">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
         </div>
+    </header>
+    
+    <nav class="main-nav">
+        <ul>
+            <li><a href="#" class="nav-link active" data-category="all">Wszystkie narzędzia</a></li>
+            <li><a href="#" class="nav-link" data-category="productivity">Produktywność</a></li>
+            <li><a href="#" class="nav-link" data-category="developer">Developer</a></li>
+            <li><a href="#" class="nav-link" data-category="utility">Narzędzia</a></li>
+            <li><a href="#" class="nav-link" data-category="security">Bezpieczeństwo</a></li>
+        </ul>
+        <div class="search-box">
+            <input type="text" placeholder="Szukaj narzędzi...">
+            <i class="fas fa-search"></i>
+        </div>
+    </nav>
+    
+    <main>
+        <section class="featured-section">
+            <h2><i class="fas fa-star"></i> Polecane narzędzia</h2>
+            <div class="grid-container">
+                <div class="project-card featured" data-category="productivity" onclick="window.location.href='/tools/todo/todo.html'">
+                    <div class="card-badge">Popularne</div>
+                    <div class="icon"><i class="fas fa-tasks"></i></div>
+                    <h3>Lista zadań</h3>
+                    <p>Organizuj swoje codzienne zadania i projekty</p>
+                    <div class="card-footer">
+                        <span class="stats"><i class="fas fa-users"></i> 1.2k dzisiaj</span>
+                        <span class="tag productivity">Produktywność</span>
+                    </div>
+                </div>
+                
+                <div class="project-card featured" data-category="productivity" onclick="window.location.href='/tools/note/note.html'">
+                    <div class="icon"><i class="fas fa-edit"></i></div>
+                    <h3>Notatnik</h3>
+                    <p>Zapisuj swoje pomysły i notatki w chmurze</p>
+                    <div class="card-footer">
+                        <span class="stats"><i class="fas fa-users"></i> 890 dzisiaj</span>
+                        <span class="tag productivity">Produktywność</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="tools-section">
+            <h2><i class="fas fa-tools"></i> Wszystkie narzędzia</h2>
+            <div class="grid-container">
+                <div class="project-card" data-category="utility" onclick="window.location.href='/tools/calc/calc.html'">
+                    <div class="icon"><i class="fas fa-calculator"></i></div>
+                    <h3>Kalkulator</h3>
+                    <p>Zaawansowany kalkulator naukowy</p>
+                    <div class="card-footer">
+                        <span class="tag utility">Narzędzie</span>
+                    </div>
+                </div>
+                
+                <div class="project-card" data-category="utility" onclick="window.location.href='world-clock.html'">
+                    <div class="icon"><i class="fas fa-globe"></i></div>
+                    <h3>Zegar światowy</h3>
+                    <p>Śledź czas w różnych strefach czasowych</p>
+                    <div class="card-footer">
+                        <span class="tag utility">Narzędzie</span>
+                    </div>
+                </div>
+                
+                <div class="project-card" data-category="utility" onclick="window.location.href='/tools/converter/converter.html'">
+                    <div class="icon"><i class="fas fa-exchange-alt"></i></div>
+                    <h3>Konwerter jednostek</h3>
+                    <p>Konwertuj między różnymi jednostkami miar</p>
+                    <div class="card-footer">
+                        <span class="tag utility">Narzędzie</span>
+                    </div>
+                </div>
+                
+                <div class="project-card" data-category="security" onclick="window.location.href='/tools/password/password.html'">
+                    <div class="card-badge">Nowe!</div>
+                    <div class="icon"><i class="fas fa-lock"></i></div>
+                    <h3>Generator haseł</h3>
+                    <p>Twórz bezpieczne, losowe hasła</p>
+                    <div class="card-footer">
+                        <span class="tag security">Bezpieczeństwo</span>
+                    </div>
+                </div>
+                
+                <div class="project-card" data-category="developer" onclick="window.location.href='/tools/json/json.html'">
+                    <div class="icon"><i class="fas fa-code"></i></div>
+                    <h3>JSON Formatter</h3>
+                    <p>Formatuj i waliduj JSON</p>
+                    <div class="card-footer">
+                        <span class="tag developer">Developer</span>
+                    </div>
+                </div>
+                
+                <div class="project-card" data-category="developer" onclick="window.location.href='/tools/base64/base64.html'">
+                    <div class="icon"><i class="fas fa-key"></i></div>
+                    <h3>Base64 Encode/Decode</h3>
+                    <p>Konwertuj tekst na Base64 i odwrotnie</p>
+                    <div class="card-footer">
+                        <span class="tag developer">Developer</span>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>NozerTools</h4>
+                <p>Profesjonalne narzędzia online dla każdego</p>
+                <div class="social-links">
+                    <a href="https://github.com/yourusername" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://tiktok.com/@yourusername" target="_blank"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://discord.gg/yourinvite" target="_blank"><i class="fab fa-discord"></i></a>
+                    <a href="https://paypal.me/yourusername" target="_blank"><i class="fab fa-paypal"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Narzędzia</h4>
+                <ul>
+                    <li><a href="#" class="nav-link" data-category="productivity">Produktywność</a></li>
+                    <li><a href="#" class="nav-link" data-category="developer">Developer</a></li>
+                    <li><a href="#" class="nav-link" data-category="security">Bezpieczeństwo</a></li>
+                    <li><a href="#" class="nav-link" data-category="utility">Inne</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Informacje</h4>
+                <ul>
+                    <li><a href="#">O nas</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Kontakt</a></li>
+                    <li><a href="#">Polityka prywatności</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 NozerTools. Wszelkie prawa zastrzeżone.</p>
+        </div>
+    </footer>
+    
     <script src="script.js"></script>
 </body>
 </html>
