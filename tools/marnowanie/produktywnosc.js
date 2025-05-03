@@ -197,6 +197,48 @@ document.addEventListener('DOMContentLoaded', () => {
     // Formatowanie liczb
     const formatter = new Intl.NumberFormat('pl-PL');
 
+    const ALTERNATIVE_SPENDINGS = {
+        BRACES: { cost: 7000, name: 'aparat na zęby' },
+        GYM_YEARLY: { cost: 1800, name: 'roczny karnet na siłownię' },
+        ROOM_RENOVATION: { cost: 10000, name: 'remont pokoju' },
+        CAR: { cost: 100000, name: 'nowe auto' },
+        APARTMENT: { cost: 600000, name: 'mieszkanie' }
+    };
+
+    function getAlternativeSpending(amount) {
+        let alternatives = [];
+        
+        if (amount >= ALTERNATIVE_SPENDINGS.BRACES.cost) {
+            const count = Math.floor(amount / ALTERNATIVE_SPENDINGS.BRACES.cost);
+            alternatives.push(`${count}x ${ALTERNATIVE_SPENDINGS.BRACES.name}`);
+        }
+        
+        if (amount >= ALTERNATIVE_SPENDINGS.GYM_YEARLY.cost) {
+            const count = Math.floor(amount / ALTERNATIVE_SPENDINGS.GYM_YEARLY.cost);
+            alternatives.push(`${count}x ${ALTERNATIVE_SPENDINGS.GYM_YEARLY.name}`);
+        }
+        
+        if (amount >= ALTERNATIVE_SPENDINGS.ROOM_RENOVATION.cost) {
+            const count = Math.floor(amount / ALTERNATIVE_SPENDINGS.ROOM_RENOVATION.cost);
+            alternatives.push(`${count}x ${ALTERNATIVE_SPENDINGS.ROOM_RENOVATION.name}`);
+        }
+        
+        if (amount >= ALTERNATIVE_SPENDINGS.CAR.cost) {
+            const count = Math.floor(amount / ALTERNATIVE_SPENDINGS.CAR.cost);
+            alternatives.push(`${count}x ${ALTERNATIVE_SPENDINGS.CAR.name}`);
+        }
+        
+        if (amount >= ALTERNATIVE_SPENDINGS.APARTMENT.cost) {
+            const count = Math.floor(amount / ALTERNATIVE_SPENDINGS.APARTMENT.cost);
+            alternatives.push(`${count}x ${ALTERNATIVE_SPENDINGS.APARTMENT.name}`);
+        }
+        
+        if (alternatives.length > 0) {
+            return `Za te pieniądze mógłbyś kupić: ${alternatives.join(' lub ')}`;
+        }
+        return null;
+    }
+
     // Animowane pokazywanie wyników
     function showResults(results) {
         const resultsSection = document.getElementById('results');
@@ -228,6 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="result-label">${results.label}</div>
             ${results.warning ? `<div class="result-warning">${results.warning}</div>` : ''}
+            ${results.alternatives ? `<div class="result-alternatives">${results.alternatives}</div>` : ''}
         `;
         
         resultsGrid.appendChild(card);
@@ -268,26 +311,30 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'smoking':
                 const smokingCost = parseFloat(formData.get('smoking'));
                 const totalSmokingCost = calculations.calculateWeekly(smokingCost, timeLeft.total);
+                const smokingAlternatives = getAlternativeSpending(totalSmokingCost);
                 results = {
                     ...results,
                     activityName: 'Na papierosy wydasz',
                     type: 'money',
                     versions: calculations.formatMoneyVersions(totalSmokingCost),
                     label: 'wydanych pieniędzy',
-                    warning: 'Uwaga: wynik zakłada dożycie 80 lat, ale regularne palenie znacząco skraca życie, więc realna kwota będzie mniejsza...'
+                    warning: 'Uwaga: wynik zakłada dożycie 80 lat, ale regularne palenie znacząco skraca życie, więc realna kwota będzie mniejsza...',
+                    alternatives: smokingAlternatives
                 };
                 break;
 
             case 'fastfood':
                 const fastfoodCost = parseFloat(formData.get('fastfood'));
                 const totalFastfoodCost = calculations.calculateMonthly(fastfoodCost, timeLeft.total);
+                const fastfoodAlternatives = getAlternativeSpending(totalFastfoodCost);
                 results = {
                     ...results,
                     activityName: 'Na fast food wydasz',
                     type: 'money',
                     versions: calculations.formatMoneyVersions(totalFastfoodCost),
                     label: 'wydanych pieniędzy',
-                    warning: 'Uwaga: wynik zakłada dożycie 80 lat, ale niezdrowe odżywianie może skrócić życie, więc realna kwota będzie mniejsza...'
+                    warning: 'Uwaga: wynik zakłada dożycie 80 lat, ale niezdrowe odżywianie może skrócić życie, więc realna kwota będzie mniejsza...',
+                    alternatives: fastfoodAlternatives
                 };
                 break;
 
@@ -299,7 +346,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     activityName: 'Gry zabiorą Ci',
                     type: 'time',
                     versions: calculations.formatTimeVersions(gamesHours),
-                    label: 'zmarnowanego czasu'
+                    label: 'zmarnowanego czasu',
+                    warning: 'Warto zaznaczyć że prawdziwie zmarnowany czas na granie to taki w którym nie czerpiesz z tego ani znajomości, ani umiejętności, a po czasie i tak wszystko zatracasz i nic z tego nie wynosisz.'
                 };
                 break;
         }

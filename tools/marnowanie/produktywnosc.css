@@ -116,6 +116,19 @@ input {
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
+/* Hide spinner buttons from number inputs */
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
 input:focus {
     outline: none;
     border-color: var(--accent);
@@ -239,6 +252,23 @@ input:focus {
     font-size: 0.9rem;
     color: var(--text-secondary);
     font-style: italic;
+}
+
+.result-alternatives {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--bg-primary);
+    border-left: 4px solid var(--card-money);
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.result-alternatives:hover {
+    transform: translateX(8px);
+    transition: transform 0.3s ease;
 }
 
 .versions-container {
