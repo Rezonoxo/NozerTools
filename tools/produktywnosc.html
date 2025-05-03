@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ile marnujesz? | NozerTools</title>
+    <link rel="stylesheet" href="produktywnosc.css">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital@0;1&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Sprawdź ile <span class="tooltip-trigger">marnujesz</span> w ciągu swojego życia: 
+                <div class="latin-tooltip">
+                    <p class="latin-word">Dissipare (łac.)</p>
+                    <p class="latin-definition">"rozpraszać, trwonić, niszczyć"</p>
+                    <p class="etymology">z łacińskiego 'dis-' (rozdzielnie) + 'supare' (rzucać)</p>
+                </div>
+            </h1>
+            <button id="theme-toggle" aria-label="Przełącz motyw">🌙</button>
+        </header>
+
+        <main class="main">
+            <div class="activity-selector">
+                <h2>Sprawdź ile <span class="tooltip-trigger">marnujesz</span>:</h2>
+                <div class="activity-buttons">
+                    <button type="button" class="activity-btn" data-activity="tiktok">
+                        <span class="activity-icon">📱</span>
+                        Czasu na TikToka
+                    </button>
+                    <button type="button" class="activity-btn" data-activity="smoking">
+                        <span class="activity-icon">🚬</span>
+                        Pieniędzy na palenie
+                    </button>
+                    <button type="button" class="activity-btn" data-activity="fastfood">
+                        <span class="activity-icon">🍔</span>
+                        Pieniędzy na fast food
+                    </button>
+                    <button type="button" class="activity-btn" data-activity="games">
+                        <span class="activity-icon">🎮</span>
+                        Czasu na gry
+                    </button>
+                </div>
+                <p class="activity-suffix">w ciągu całego życia</p>
+            </div>
+
+            <form id="waste-calculator" class="calculator-form hidden">
+                <div class="form-group">
+                    <label for="age">Twój wiek (lata):</label>
+                    <input type="number" id="age" name="age" min="1" max="79" required>
+                </div>
+
+                <div class="form-group activity-input hidden" data-form="tiktok">
+                    <label for="tiktok">Czas na TikToku (minuty/dzień):</label>
+                    <input type="number" id="tiktok" name="tiktok" min="0">
+                </div>
+
+                <div class="form-group activity-input hidden" data-form="smoking">
+                    <label for="smoking">Koszt papierosów (zł/tydzień):</label>
+                    <input type="number" id="smoking" name="smoking" min="0" step="0.01">
+                </div>
+
+                <div class="form-group activity-input hidden" data-form="fastfood">
+                    <label for="fastfood">Koszt fast foodów (zł/miesiąc):</label>
+                    <input type="number" id="fastfood" name="fastfood" min="0" step="0.01">
+                </div>
+
+                <div class="form-group activity-input hidden" data-form="games">
+                    <label for="games">Czas na gry (minuty/dzień):</label>
+                    <input type="number" id="games" name="games" min="0">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Oblicz</button>
+                <button type="button" class="btn btn-secondary" id="back-btn">Wróć do wyboru</button>
+            </form>
+
+            <div id="results" class="results hidden">
+                <h2>Twoje podsumowanie</h2>
+                <p class="life-remaining"></p>
+                
+                <div class="results-grid">
+                    <!-- Karty wyników będą dodawane przez JavaScript -->
+                </div>
+
+                <button type="button" class="btn btn-secondary" id="new-calculation">
+                    Nowe obliczenie
+                </button>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Wykonano w ramach projektu <a href="../index.html">NozerTools</a></p>
+        </footer>
+    </div>
+
+    <script src="produktywnosc.js"></script>
+</body>
+</html>
