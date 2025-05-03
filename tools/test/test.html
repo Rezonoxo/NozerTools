@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychika test - Nozercode</title>
+    <link rel="stylesheet" href="test.css">
+</head>
+<body>
+    <header>
+        <h1>Test Psychiki</h1>
+        <p class="description">Interaktywny test psychologiczny do samopoznania i autorefleksji</p>
+    </header>
+
+    <div class="test-container">
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0% ukończono</div>
+        </div>
+
+        <div class="dialog-container" id="dialogContainer">
+            <div class="bot-message" id="welcomeMessage">
+                <div class="typing-indicator">
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="userInput" placeholder="Twoja odpowiedź..." disabled>
+            <button id="sendBtn" disabled>Wyślij</button>
+        </div>
+
+        <div class="options-container" id="optionsContainer"></div>
+
+        <div class="controls">
+            <button id="restartBtn">Restart</button>
+        </div>
+    </div>
+
+    <div class="result-container" id="resultContainer">
+        <h2>Twój Profil Psychologiczny</h2>
+        <div id="resultContent"></div>
+        <button class="download-btn" id="downloadBtn">Pobierz wynik</button>
+    </div>
+
+    <footer>
+        <p>Wykonano w ramach projektu <a href="/index.html">NozerTools</a></p>
+    </footer>
+
+    <script src="test.js"></script>
+</body>
+</html>
