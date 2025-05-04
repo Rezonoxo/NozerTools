@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Kodów QR</title>
+    <link rel="stylesheet" href="qr.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator/qrcode.min.js"></script>
+    <style>
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 30px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-switch">
+        <label class="switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider round"></span>
+        </label>
+        <span>Tryb ciemny</span>
+    </div>
+
+    <div class="container">
+        <h1>Generator Kodów QR</h1>
+        
+        <div class="input-group">
+            <input type="text" id="qrInput" placeholder="Wprowadź tekst zgodnie z wybranym typem">
+            <select id="inputType">
+                <option value="text">Tekst</option>
+                <option value="url">URL</option>
+                <option value="email">Email</option>
+                <option value="tel">Telefon</option>
+                <option value="whatsapp">WhatsApp</option>
+                <option value="facebook">Facebook</option>
+                <option value="twitter">Twitter/X</option>
+                <option value="instagram">Instagram</option>
+                <option value="linkedin">LinkedIn</option>
+                <option value="youtube">YouTube</option>
+                <option value="spotify">Spotify</option>
+                <option value="telegram">Telegram</option>
+                <option value="wifi">Wi-Fi</option>
+                <option value="sms">SMS</option>
+                <option value="location">Lokalizacja (Maps)</option>
+                <option value="app">Link do aplikacji</option>
+            </select>
+        </div>
+
+        <div class="button-group">
+            <button id="generateBtn">Generuj QR</button>
+            <button id="downloadBtn" disabled>Pobierz PNG</button>
+            <button id="clearBtn">Wyczyść</button>
+        </div>
+
+        <div class="qr-preview" id="qrPreview">
+            <!-- QR kod będzie tutaj wygenerowany -->
+        </div>
+
+        <footer class="footer">
+            <p>Wykonano w ramach projektu NozerTools</p>
+        </footer>
+    </div>
+
+    <script src="qr.js"></script>
+</body>
+</html>
