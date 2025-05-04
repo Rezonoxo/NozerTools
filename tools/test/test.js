@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
           inputType: "options"
       },
       {
-          text: "Wyobraź sobie, że otrzymujesz krytykę od swojego przełożonego. Jak byś zareagował/a?",
+          text: "Wyobraź sobie, że otrzymujesz krytykę od swojego znajonego. Jak byś zareagował/a?",
           category: "confidence",
           inputType: "text"
       },

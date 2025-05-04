@@ -1,0 +1,435 @@
+/* Zmienne CSS z nowymi kolorami */
+:root {
+    --bg-color: #f5e6d3; /* Vanilla shade */
+    --container-bg: rgba(255, 255, 255, 0.7);
+    --text-color: #2c3e50;
+    --border-color: rgba(255, 255, 255, 0.4);
+    --primary-color: #8B4513; /* Saddle brown - ciemniejszy brąz */
+    --primary-hover: #A0522D; /* Sienna - jaśniejszy brąz */
+    --strength-weak: #ef4444;
+    --strength-medium: #f59e0b;
+    --strength-strong: #10b981;
+    --disabled-bg: #9ca3af;
+    --glass-shadow: 0 8px 32px 0 rgba(139, 69, 19, 0.2);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.18);
+    --glass-bg: rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="dark"] {
+    --bg-color: #2F1810; /* Dark chocolate */
+    --container-bg: rgba(62, 39, 35, 0.7);
+    --text-color: #e2e8f0;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --primary-color: #D2691E; /* Chocolate */
+    --primary-hover: #CD853F; /* Peru */
+    --disabled-bg: #475569;
+    --glass-bg: rgba(62, 39, 35, 0.25);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Animowany gradient tła */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Animacja pojawiania się elementów */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Animacja pulsu dla przycisku */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+}
+
+/* Podstawowe style */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 2rem 1rem;
+}
+
+/* Glassmorphism container */
+.container {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--glass-shadow);
+    border: var(--glass-border);
+    width: 90%;
+    max-width: 500px;
+    margin: 2rem auto;
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Theme switch styling */
+.theme-switch {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 100;
+    padding: 0.5rem;
+    border-radius: 12px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: var(--glass-border);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Modern inputs styling */
+input[type="text"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--glass-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+/* Modern buttons */
+button {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#generateButton {
+    animation: pulse 2s infinite;
+}
+
+/* Tabs styling */
+.tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
+    background: var(--glass-bg);
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-color);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: transparent;
+}
+
+/* Strength bar styling */
+.strength-bar {
+    height: 8px;
+    background-color: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0;
+    transition: all 0.5s ease;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.strength-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shine 2s infinite;
+}
+
+@keyframes shine {
+    to {
+        left: 100%;
+    }
+}
+
+.strength-fill.weak { 
+    background-color: var(--strength-weak); 
+    width: 33.33%; 
+}
+
+.strength-fill.medium { 
+    background-color: var(--strength-medium); 
+    width: 66.66%; 
+}
+
+.strength-fill.strong { 
+    background-color: var(--strength-strong); 
+    width: 100%; 
+}
+
+/* Password display and strength bar layout */
+.password-display {
+    display: flex;
+    gap: 1rem; /* Zwiększony odstęp między hasłem a przyciskiem */
+    margin-bottom: 1.5rem;
+    align-items: start; /* Wyrównanie elementów do góry */
+}
+
+#passwordOutput, 
+#passwordCheck {
+    flex: 1;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem; /* Dodanie odstępu przed paskiem siły */
+}
+
+.password-strength {
+    margin: 0.5rem 0 1.5rem 0; /* Większy odstęp po pasku siły */
+    clear: both; /* Upewnienie się, że pasek jest zawsze pod hasłem */
+}
+
+/* Checkboxes styling */
+.checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+}
+
+.checkboxes label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.checkboxes label:hover {
+    background: var(--glass-bg);
+}
+
+input[type="checkbox"] {
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 4px;
+    border: 2px solid var(--border-color);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+input[type="checkbox"]:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Range input styling */
+input[type="range"] {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--border-color);
+    outline: none;
+    margin: 1rem 0;
+    -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+/* Feedback list styling */
+.password-feedback ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.password-feedback li {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    opacity: 0;
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+.password-feedback li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .password-display {
+        flex-direction: column;
+    }
+
+    #copyButton {
+        width: 100%;
+    }
+
+    .theme-switch {
+        top: auto;
+        bottom: 1rem;
+        right: 1rem;
+    }
+}
+
+/* Copy button success animation */
+@keyframes copiedAnimation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.copied {
+    animation: copiedAnimation 0.3s ease-in-out;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    border-top: 1px solid var(--border-color);
+}
+
+footer a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

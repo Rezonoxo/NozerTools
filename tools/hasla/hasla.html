@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Haseł</title>
+    <link rel="stylesheet" href="hasla.css">
+</head>
+<body>
+    <div class="theme-switch">
+        <label class="switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider round"></span>
+        </label>
+        <span>Tryb ciemny</span>
+    </div>
+
+    <div class="container">
+        <h1>Generator Haseł</h1>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="generator">Generator</button>
+            <button class="tab-btn" data-tab="checker">Sprawdź hasło</button>
+        </div>
+
+        <div class="tab-content" id="generator">
+            <div class="password-display">
+                <input type="text" id="passwordOutput" readonly>
+                <button id="copyButton">Kopiuj</button>
+            </div>
+
+            <div class="password-strength">
+                <div class="strength-bar">
+                    <div class="strength-fill"></div>
+                </div>
+                <span class="strength-text"></span>
+            </div>
+
+            <div class="generation-type">
+                <select id="passwordType">
+                    <option value="random">Losowe znaki</option>
+                    <option value="memorable">Łatwe do zapamiętania</option>
+                    <option value="easy-type">Łatwe do wpisania</option>
+                </select>
+            </div>
+
+            <div class="options" id="randomOptions">
+                <div class="length-control">
+                    <label for="passwordLength">Długość hasła: <span id="lengthValue">12</span></label>
+                    <input type="range" id="passwordLength" min="4" max="32" value="12">
+                </div>
+
+                <div class="checkboxes">
+                    <label>
+                        <input type="checkbox" id="lowercase" checked>
+                        Małe litery
+                    </label>
+                    <label>
+                        <input type="checkbox" id="uppercase" checked>
+                        Wielkie litery
+                    </label>
+                    <label>
+                        <input type="checkbox" id="numbers" checked>
+                        Cyfry
+                    </label>
+                    <label>
+                        <input type="checkbox" id="special" checked>
+                        Znaki specjalne
+                    </label>
+                </div>
+            </div>
+
+            <div class="options" id="memorableOptions" style="display: none;">
+                <div class="length-control">
+                    <label for="wordCount">Liczba słów: <span id="wordCountValue">3</span></label>
+                    <input type="range" id="wordCount" min="2" max="6" value="3">
+                </div>
+                <div class="checkboxes">
+                    <label>
+                        <input type="checkbox" id="capitalized" checked>
+                        Wielka litera na początku
+                    </label>
+                    <label>
+                        <input type="checkbox" id="addNumbers" checked>
+                        Dodaj cyfry
+                    </label>
+                </div>
+            </div>
+
+            <button id="generateButton">Generuj hasło</button>
+        </div>
+
+        <div class="tab-content" id="checker" style="display: none;">
+            <div class="password-input">
+                <input type="password" id="passwordCheck" placeholder="Wpisz hasło do sprawdzenia">
+                <button id="togglePassword">👁️</button>
+            </div>
+
+            <div class="password-strength">
+                <div class="strength-bar">
+                    <div class="strength-fill"></div>
+                </div>
+                <span class="strength-text"></span>
+            </div>
+
+            <div class="password-feedback">
+                <ul id="passwordFeedback"></ul>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>Wykonano w ramach projektu <a href="../../index.html">NozerTools</a></p>
+    </footer>
+    <script src="hasla.js"></script>
+</body>
+</html>
