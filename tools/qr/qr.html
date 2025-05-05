@@ -6,16 +6,6 @@
     <title>Generator Kodów QR</title>
     <link rel="stylesheet" href="qr.css">
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator/qrcode.min.js"></script>
-    <style>
-        .footer {
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 30px;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-color);
-            font-size: 14px;
-        }
-    </style>
 </head>
 <body>
     <div class="theme-switch">
@@ -60,11 +50,11 @@
         <div class="qr-preview" id="qrPreview">
             <!-- QR kod będzie tutaj wygenerowany -->
         </div>
-
-        <footer class="footer">
-            <p>Wykonano w ramach projektu NozerTools</p>
-        </footer>
     </div>
+
+    <footer>
+        <p>Wykonano w ramach projektu <a href="../../index.html">NozerTools</a></p>
+    </footer>
 
     <script src="qr.js"></script>
 </body>
