@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Licznik słów i znaków | NozerTools</title>
+    <link rel="stylesheet" href="licznik.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Licznik słów i znaków <span class="nt-badge">| NozerTools</span></h1>
+            <button id="theme-toggle" aria-label="Przełącz motyw" title="Przełącz motyw">
+                <span class="theme-icon" id="theme-icon">🌙</span>
+            </button>
+        </header>
+        <main>
+            <form class="counter-form" autocomplete="off">
+                <label for="text-input">Wklej lub wpisz tekst:</label>
+                <textarea id="text-input" rows="8" placeholder="Wpisz tutaj swój tekst..."></textarea>
+            </form>
+            <section class="results" id="results">
+                <div class="result-card">
+                    <span class="result-label">Słowa</span>
+                    <span class="result-value" id="word-count">0</span>
+                </div>
+                <div class="result-card">
+                    <span class="result-label">Znaki (ze spacjami)</span>
+                    <span class="result-value" id="char-count">0</span>
+                </div>
+                <div class="result-card">
+                    <span class="result-label">Znaki (bez spacji)</span>
+                    <span class="result-value" id="char-nospace-count">0</span>
+                </div>
+                <div class="result-card">
+                    <span class="result-label">Linie</span>
+                    <span class="result-value" id="line-count">0</span>
+                </div>
+            </section>
+        </main>
+        <footer class="footer">
+            <p>Wykonano w ramach projektu <a href="../../index.html">NozerTools</a></p>
+        </footer>
+    </div>
+    <script src="licznik.js"></script>
+</body>
+</html>
