@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1>Bądź świadomy ile <span class="tooltip-trigger">marnujesz</span> w ciągu swojego życia: 
+            <h1>Bądź świadomy ile <span class="tooltip-trigger">doświadczasz</span> w ciągu swojego życia: 
                 <div class="latin-tooltip">
                     <p class="latin-word">Dissipare (łac.)</p>
                     <p class="latin-definition">"rozpraszać, trwonić, niszczyć"</p>
@@ -36,18 +36,18 @@
                         <span class="activity-icon">🍔</span>
                         Pieniędzy na fast food
                     </button>
-                    <button type="button" class="activity-btn" data-activity="games">
-                        <span class="activity-icon">🎮</span>
-                        Czasu na granie
-                    </button>
                 </div>
                 <p class="activity-suffix">w ciągu całego życia</p>
+                <button type="button" class="activity-btn activity-btn-full" data-activity="life">
+                    <span class="activity-icon">⏳</span>
+                    Statystyki życia
+                </button>
             </div>
 
             <form id="waste-calculator" class="calculator-form hidden">
                 <div class="form-group">
-                    <label for="age">Twój wiek (lata):</label>
-                    <input type="number" id="age" name="age" min="1" max="79" required>
+                    <label for="birthdate">Data urodzenia:</label>
+                    <input type="date" id="birthdate" name="birthdate" required>
                 </div>
 
                 <div class="form-group activity-input hidden" data-form="tiktok">
@@ -65,9 +65,9 @@
                     <input type="number" id="fastfood" name="fastfood" min="0" step="0.01">
                 </div>
 
-                <div class="form-group activity-input hidden" data-form="games">
-                    <label for="games">Czas na gry (minuty/dzień):</label>
-                    <input type="number" id="games" name="games" min="0">
+                <div class="form-group activity-input hidden" data-form="life">
+                    <label for="sleep">Ilość godzin snu na dobę:</label>
+                    <input type="number" id="sleep" name="sleep" min="0" max="24" step="0.5" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Oblicz</button>
