@@ -404,7 +404,79 @@ document.addEventListener('DOMContentLoaded', () => {
             const feedbackList = container.nextElementSibling.querySelector('ul');
             feedbackList.innerHTML = feedback.map(item => `<li>${item}</li>`).join('');
         }
+
+        if (container.nextElementSibling?.classList.contains('bruteforce-time')) {
+            // Dodajemy inteligentne wskazówki na podstawie czasu brute-force
+            const bruteElem = container.nextElementSibling.querySelector('#bruteforceTime');
+            if (bruteElem && password) {
+                const seconds = estimateBruteforceSeconds(password);
+                let tip = '';
+                if (seconds < 60) {
+                    tip = 'To hasło można złamać natychmiast. Zmień je natychmiast!';
+                } else if (seconds < 3600) {
+                    tip = 'To hasło jest bardzo słabe. Użyj dłuższego i bardziej złożonego.';
+                } else if (seconds < 86400) {
+                    tip = 'To hasło jest słabe. Dodaj więcej znaków lub typów znaków.';
+                } else if (seconds < 31536000) {
+                    tip = 'Hasło jest przeciętne. Zalecane jest wydłużenie lub dodanie znaków specjalnych.';
+                } else if (seconds < 3153600000) {
+                    tip = 'Hasło jest dobre, ale można je jeszcze wzmocnić.';
+                } else {
+                    tip = 'Hasło jest bardzo silne. Pamiętaj, by nie używać go w wielu miejscach.';
+                }
+                bruteElem.innerHTML = bruteElem.innerHTML.split('<br>')[0] + '<br><span class="bruteforce-tip">' + tip + '</span>';
+            }
+        }
     };
+
+    // Funkcja pomocnicza do szacowania sekund (do wskazówek)
+    function estimateBruteforceSeconds(password) {
+        let charsetSize = 0;
+        if (/[a-z]/.test(password)) charsetSize += 26;
+        if (/[A-Z]/.test(password)) charsetSize += 26;
+        if (/[0-9]/.test(password)) charsetSize += 10;
+        if (/[^a-zA-Z0-9]/.test(password)) charsetSize += 32;
+        if (charsetSize === 0) return 0;
+        return Math.pow(charsetSize, password.length) / 1e9;
+    }
+
+    // Szacowanie czasu brute-force
+    function estimateBruteforceTime(password) {
+        if (!password) return '';
+        let charsetSize = 0;
+        if (/[a-z]/.test(password)) charsetSize += 26;
+        if (/[A-Z]/.test(password)) charsetSize += 26;
+        if (/[0-9]/.test(password)) charsetSize += 10;
+        if (/[^a-zA-Z0-9]/.test(password)) charsetSize += 32; // typowe znaki specjalne
+        if (charsetSize === 0) return '';
+        const guesses = Math.pow(charsetSize, password.length);
+        // Załóżmy 1 miliard prób na sekundę (1e9)
+        const guessesPerSecond = 1e9;
+        const seconds = guesses / guessesPerSecond;
+        return formatTime(seconds);
+    }
+
+    function formatTime(seconds) {
+        if (seconds < 1) return '< 1 sekunda';
+        const units = [
+            { label: 'lat', value: 60 * 60 * 24 * 365 },
+            { label: 'dni', value: 60 * 60 * 24 },
+            { label: 'godz.', value: 60 * 60 },
+            { label: 'min', value: 60 },
+            { label: 'sek.', value: 1 }
+        ];
+        let remaining = Math.floor(seconds);
+        let result = [];
+        for (const unit of units) {
+            const amount = Math.floor(remaining / unit.value);
+            if (amount > 0) {
+                result.push(amount + ' ' + unit.label);
+                remaining -= amount * unit.value;
+            }
+            if (result.length >= 2) break;
+        }
+        return result.length ? result.join(' ') : '< 1 sekunda';
+    }
 
     // Generate random words
     const generateWords = (count, addNumbers, capitalized, useLeet) => {
@@ -532,8 +604,61 @@ document.addEventListener('DOMContentLoaded', () => {
     // Password checker input handler
     passwordCheck.addEventListener('input', () => {
         updateStrengthIndicator(passwordCheck.value, passwordCheck.parentElement.nextElementSibling);
+        // Brute-force time + wskazówki
+        const bruteElem = document.getElementById('bruteforceTime');
+        if (bruteElem) {
+            if (passwordCheck.value) {
+                bruteElem.textContent = 'Szacowany czas złamania brute-force: ' + estimateBruteforceTime(passwordCheck.value);
+                // Zbierz inteligentne rady na podstawie analizy hasła
+                const advices = [];
+                const pwd = passwordCheck.value;
+                if (!/[a-z]/.test(pwd)) advices.push('Dodaj małe litery.');
+                if (!/[A-Z]/.test(pwd)) advices.push('Dodaj wielkie litery.');
+                if (!/[0-9]/.test(pwd)) advices.push('Dodaj cyfry.');
+                if (!/[^a-zA-Z0-9]/.test(pwd)) advices.push('Dodaj znaki specjalne.');
+                if (/(.)\1{2,}/.test(pwd)) advices.push('Unikaj powtarzających się znaków.');
+                if (/(?:0123|1234|2345|3456|4567|5678|6789|7890)/.test(pwd)) advices.push('Unikaj sekwencji numerycznych.');
+                if (/(?:abcd|bcde|cdef|defg|efgh|fghi|ghij|hijk|ijkl|jklm|klmn|lmno|mnop|nopq|opqr|pqrs|qrst|rstu|stuv|tuvw|uvwx|vwxy|wxyz)/i.test(pwd)) advices.push('Unikaj sekwencji liter.');
+                if (/^(19|20)\d{2}$/.test(pwd) || /^0[1-9]|[12][0-9]|3[01]$/.test(pwd)) advices.push('Nie używaj daty urodzenia ani innych dat.');
+                if (pwd.length < 12) advices.push('Użyj dłuższego hasła (min. 12 znaków).');
+                // Unikaj popularnych haseł
+                const common = [
+                    '123456','123456789','12345','qwerty','password','admin','haslo','hasło','11111111','000000','123123','abc123','qwertyuiop','zxcvbnm','1234567','12345678','administrator','root','master','polska','abcdef','dragon','baseball','football','letmein','monkey','microsoft','welcome','test','shadow','superman','killer','soccer','hockey','batman','passw0rd','p@ssw0rd','p@ssword','1qaz2wsx','qazwsx'
+                ];
+                if (common.some(w => pwd.toLowerCase().includes(w))) advices.push('Unikaj popularnych haseł i słów.');
+                // Wyświetl rady
+                if (advices.length) {
+                    bruteElem.innerHTML += '<br><span class="bruteforce-tip">' + advices.join('<br>') + '</span>';
+                } else {
+                    // Jeśli nie ma rad, wyświetl ogólną informację
+                    bruteElem.innerHTML += '<br><span class="bruteforce-tip">Hasło jest bardzo silne. Pamiętaj, by nie używać go w wielu miejscach.</span>';
+                }
+            } else {
+                bruteElem.textContent = '';
+            }
+        }
     });
 
     // Initial validation
     validateCheckboxes();
+
+    // Losowe ciekawostki o hasłach
+    const passwordFacts = [
+        'Najpopularniejszym polskim zamiennikiem słowa "hasło" jest "masło".',
+        '"password" przez lata było w top 3 najczęściej używanych haseł.',
+        'Hasła typu "qwerty" i "abc123" są bardzo łatwe do złamania.',
+        '23 miliony osób na świecie używa hasła "123456".',
+        'Używanie tego samego hasła w wielu miejscach to duże ryzyko.',
+        'Hasła o długości poniżej 8 znaków są do złamania w jeden wieczór.',
+        'Najdłuższe hasło w wycieku RockYou miało 255 znaków.',
+        'Nozertools generator hasła jest w pełni anonimowy.',
+        'Hasła z imionami, datami urodzenia i klubami sportowymi są bardzo przewidywalne.',
+        'Menedżery haseł pomagają zapamiętywać silne, unikalne hasła.'
+    ];
+    function showRandomPasswordFact() {
+        const fact = passwordFacts[Math.floor(Math.random() * passwordFacts.length)];
+        const factElem = document.getElementById('passwordFact');
+        if (factElem) factElem.textContent = fact;
+    }
+    showRandomPasswordFact();
 });

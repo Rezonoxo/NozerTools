@@ -385,6 +385,85 @@ input[type="range"]::-webkit-slider-thumb:hover {
     color: var(--primary-color);
 }
 
+/* Brute-force time info */
+.bruteforce-time {
+    margin: 0.5rem 0 1.2rem 0;
+    font-size: 1.02rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    text-align: left;
+    min-height: 1.2em;
+}
+
+.bruteforce-tip {
+    display: block;
+    margin-top: 0.3em;
+    color: #d7263d !important;
+    font-size: 1.01rem;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 6px;
+    padding: 0.3em 0.7em;
+    box-shadow: 0 1px 6px 0 rgba(215,38,61,0.07);
+}
+
+/* Fakty o hasłach */
+.password-facts {
+    margin: 2.5rem auto 0 auto;
+    background: var(--glass-bg);
+    border-radius: 14px;
+    box-shadow: 0 2px 12px 0 rgba(60,60,90,0.07);
+    padding: 1.2rem 1.5rem 1.2rem 1.5rem;
+    max-width: 480px;
+    color: var(--text-color);
+    font-size: 1.01rem;
+    border: var(--glass-border);
+    text-align: left;
+}
+.password-facts h3 {
+    font-size: 1.13rem;
+    margin-bottom: 0.7em;
+    color: var(--primary-color);
+}
+.password-facts ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.password-facts li {
+    margin-bottom: 0.5em;
+    padding-left: 0.2em;
+    line-height: 1.5;
+}
+.password-facts b {
+    color: var(--primary-color);
+}
+
+/* Pasek ciekawostki o hasłach - auto skalowanie tekstu */
+.password-fact-bar {
+    margin: 1.5rem auto 0 auto;
+    background: var(--glass-bg);
+    border-radius: 8px;
+    box-shadow: 0 1px 6px 0 rgba(60,60,90,0.07);
+    padding: 0.5em 1em;
+    max-width: 420px;
+    color: var(--primary-color);
+    font-size: clamp(0.85rem, 2.5vw, 1.08rem);
+    border: var(--glass-border);
+    text-align: center;
+    min-height: 1.5em;
+    font-weight: 600;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    line-height: 1.3;
+    word-break: break-word;
+}
+
+#passwordFact {
+    display: inline;
+}
+
 /* Responsive design */
 @media (max-width: 480px) {
     .container {
