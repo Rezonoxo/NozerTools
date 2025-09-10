@@ -1,0 +1,2223 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydroTrack - Śledzenie Nawodnienia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2980b9;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --gray: #95a5a6;
+            --white: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --glass: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #c2e9fb 0%, #a1c4fd 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow);
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 28px;
+        }
+
+        nav {
+            display: flex;
+            background: var(--secondary);
+            padding: 0;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--white);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            border-bottom: 3px solid var(--accent);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .section {
+            display: none;
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Strona główna */
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .progress-container {
+            position: relative;
+            width: 250px;
+            height: 250px;
+        }
+
+        .progress-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) 0%, var(--light) 0%);
+            transition: all 0.5s ease;
+        }
+
+        .progress-inner {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: calc(100% - 30px);
+            height: calc(100% - 30px);
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .progress-value {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .progress-target {
+            font-size: 16px;
+            color: var(--gray);
+        }
+
+        .water-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .water-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .water-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px var(--shadow);
+        }
+
+        .water-btn.custom {
+            background: var(--accent);
+            grid-column: span 2;
+        }
+
+        .water-btn i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .hydration-log {
+            width: 100%;
+            max-width: 600px;
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .log-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .log-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .log-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Popup z ciekawostką */
+        .fact-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 25px var(--shadow);
+            max-width: 350px;
+            z-index: 100;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .fact-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .fact-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .fact-content {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* Notifications section */
+        .reminder-form {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .form-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--light);
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+        }
+
+        .reminder-list {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        /* Statistics section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px var(--shadow);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: var(--gray);
+        }
+
+        .chart-container {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px var(--shadow);
+            margin-bottom: 30px;
+            height: 300px;
+        }
+
+        /* Help section */
+        .faq-list {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--light);
+            padding-bottom: 15px;
+        }
+
+        .faq-question {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s ease;
+            user-select: none;
+        }
+
+        .faq-question:hover {
+            color: var(--primary);
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+            color: var(--primary);
+        }
+
+        .faq-question.active i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--dark);
+            padding-top: 10px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding-top 0.3s ease;
+        }
+
+        .faq-answer.active {
+            max-height: 200px;
+            padding-top: 10px;
+        }
+
+        .contact-info {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        /* Goal setting modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px var(--shadow);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+            padding: 5px;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--light);
+        }
+
+        .goal-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--light);
+        }
+
+        .goal-tab {
+            flex: 1;
+            padding: 12px;
+            background: var(--light);
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .goal-tab.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .goal-form {
+            display: none;
+        }
+
+        .goal-form.active {
+            display: block;
+        }
+
+        .goal-form h4 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent);
+            color: var(--white);
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .calculate-btn:hover {
+            background: #17a085;
+            transform: translateY(-2px);
+        }
+
+        .result-display {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .progress-target {
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .progress-target:hover {
+            color: var(--primary);
+        }
+
+        /* Auth section styles */
+        .auth-section {
+            display: none;
+            padding: 30px;
+            min-height: 500px;
+            text-align: center;
+        }
+
+        .auth-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .auth-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--light);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 15px;
+            background: var(--light);
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .auth-tab.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .auth-form h3 {
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--light);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .auth-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .auth-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .auth-switch {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+
+        .user-info {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            color: var(--white);
+        }
+
+        .user-info.active {
+            display: flex;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--white);
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--white);
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .error-message {
+            background: var(--danger);
+            color: var(--white);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        .success-message {
+            background: var(--success);
+            color: var(--white);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        /* Globalne komunikaty błędów */
+        .global-error {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--danger);
+            color: var(--white);
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px var(--shadow);
+            z-index: 1000;
+            display: none;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .global-error.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .global-success {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--success);
+            color: var(--white);
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px var(--shadow);
+            z-index: 1000;
+            display: none;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .global-success.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+
+        /* Responsywność */
+        @media (max-width: 768px) {
+            .water-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .water-btn.custom {
+                grid-column: span 1;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+            }
+            
+            .nav-item {
+                flex: 1 0 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-tint"></i>
+                <span>HydroTrack</span>
+            </div>
+            <div class="user-info" id="user-info">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">Użytkownik</span>
+                <button class="logout-btn" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </header>
+        
+        <nav>
+            <div class="nav-item" data-target="dashboard">
+                <i class="fas fa-home"></i> Strona Główna
+            </div>
+            <div class="nav-item" data-target="notifications">
+                <i class="fas fa-bell"></i> Powiadomienia
+            </div>
+            <div class="nav-item" data-target="statistics">
+                <i class="fas fa-chart-bar"></i> Statystyki
+            </div>
+            <div class="nav-item" data-target="help">
+                <i class="fas fa-question-circle"></i> Pomoc
+            </div>
+        </nav>
+        
+        <!-- Sekcja logowania -->
+        <section id="auth" class="auth-section active">
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-form="login">Logowanie</button>
+                    <button class="auth-tab" data-form="register">Rejestracja</button>
+                </div>
+                
+                <div class="error-message" id="auth-error"></div>
+                <div class="success-message" id="auth-success"></div>
+                
+                <!-- Formularz logowania -->
+                <form class="auth-form active" id="login-form">
+                    <h3>Zaloguj się</h3>
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Hasło</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="auth-btn" id="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Zaloguj się
+                    </button>
+                    <button type="button" class="auth-btn" id="continue-offline" style="background: var(--accent);">
+                        <i class="fas fa-user-clock"></i> Kontynuuj bez logowania
+                    </button>
+                </form>
+                
+                <!-- Formularz rejestracji -->
+                <form class="auth-form" id="register-form">
+                    <h3>Utwórz konto</h3>
+                    <div class="form-group">
+                        <label for="register-name">Imię</label>
+                        <input type="text" id="register-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Hasło</label>
+                        <input type="password" id="register-password" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm">Potwierdź hasło</label>
+                        <input type="password" id="register-confirm" required>
+                    </div>
+                    <button type="submit" class="auth-btn" id="register-btn">
+                        <i class="fas fa-user-plus"></i> Utwórz konto
+                    </button>
+                </form>
+            </div>
+        </section>
+        
+        <!-- Sekcja główna -->
+        <section id="dashboard" class="section">
+            <div class="dashboard">
+                <div class="progress-container">
+                    <div class="progress-circle" id="progress-circle"></div>
+                    <div class="progress-inner">
+                        <div class="progress-value" id="progress-value">0%</div>
+                        <div class="progress-target" id="progress-target">0 / 2000 ml</div>
+                    </div>
+                </div>
+                
+                <div class="water-buttons">
+                    <button class="water-btn" data-amount="150">
+                        <i class="fas fa-glass"></i>
+                        150 ml
+                    </button>
+                    <button class="water-btn" data-amount="250">
+                        <i class="fas fa-glass"></i>
+                        250 ml
+                    </button>
+                    <button class="water-btn" data-amount="500">
+                        <i class="fas fa-glass"></i>
+                        500 ml
+                    </button>
+                    <button class="water-btn custom" id="custom-water">
+                        <i class="fas fa-pen"></i>
+                        Niestandardowa ilość
+                    </button>
+                </div>
+                
+                <div class="hydration-log">
+                    <h3 class="log-title"><i class="fas fa-history"></i> Ostatnie nawodnienia</h3>
+                    <div class="log-list" id="hydration-log">
+                        <!-- Tutaj będą dodawane wpisy -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sekcja powiadomień -->
+        <section id="notifications" class="section">
+            <h2 class="form-title"><i class="fas fa-bell"></i> Ustawienia powiadomień</h2>
+            
+            <div class="reminder-form">
+                <h3 class="form-title">Dodaj przypomnienie</h3>
+                <div class="form-group">
+                    <label for="reminder-type">Typ przypomnienia</label>
+                    <select id="reminder-type">
+                        <option value="interval">Co określony czas</option>
+                        <option value="specific">O konkretnej godzinie</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="interval-group">
+                    <label for="reminder-interval">Interwał (minuty)</label>
+                    <input type="number" id="reminder-interval" min="5" value="30">
+                </div>
+                
+                <div class="form-group" id="time-group" style="display: none;">
+                    <label for="reminder-time">Godzina</label>
+                    <input type="time" id="reminder-time">
+                </div>
+                
+                <button class="btn" id="add-reminder">Dodaj przypomnienie</button>
+                <button class="btn" id="test-notification" style="background: var(--accent); margin-top: 10px;">Testuj powiadomienie</button>
+            </div>
+            
+            <div class="reminder-list">
+                <h3 class="form-title">Aktywne przypomnienia</h3>
+                <div id="reminders-list">
+                    <!-- Tutaj będą dodawane przypomnienia -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sekcja statystyk -->
+        <section id="statistics" class="section">
+            <h2 class="form-title"><i class="fas fa-chart-bar"></i> Statystyki nawodnienia</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Dzisiejsze nawodnienie</div>
+                    <div class="stat-value" id="stat-today">0 ml</div>
+                    <div class="stat-label" id="stat-today-percent">0% celu</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-label">Średnia dzienna</div>
+                    <div class="stat-value" id="stat-average">0 ml</div>
+                    <div class="stat-label">z ostatnich 7 dni</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-label">Dni z osiągniętym celem</div>
+                    <div class="stat-value" id="stat-goal-days">0</div>
+                    <div class="stat-label">w tym miesiącu</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-label">Aktualna passa</div>
+                    <div class="stat-value" id="stat-streak">0 dni</div>
+                    <div class="stat-label">dni z rzędu z celem</div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h3 class="form-title">Nawodnienie w tym tygodniu</h3>
+                <canvas id="weekly-chart"></canvas>
+            </div>
+        </section>
+        
+        <!-- Sekcja pomocy -->
+        <section id="help" class="section">
+            <h2 class="form-title"><i class="fas fa-question-circle"></i> Centrum pomocy</h2>
+            
+            <div class="faq-list">
+                <h3 class="form-title">Często zadawane pytania</h3>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Jak ustawić dzienny cel nawodnienia?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Aby ustawić dzienny cel, przejdź do sekcji głównej i kliknij na wartość celu. Możesz ustawić cel ręcznie lub obliczyć go na podstawie swojej wagi i poziomu aktywności.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Jak dodać niestandardową ilość wody?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Kliknij przycisk "Niestandardowa ilość" na stronie głównej, a następnie wprowadż żądaną ilość wody w mililitrach.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Jak działają powiadomienia?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        W sekcji Powiadomienia możesz ustawić przypomnienia o piciu wody. Możesz wybrać powiadomienia co określony czas (np. co 30 minut) lub o konkretnej godzinie.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Co oznacza komunikat "Dane będą zapisywane lokalnie"?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Jeśli widzisz ten komunikat, oznacza to, że aplikacja nie może połączyć się z bazą danych online. Twoje dane są bezpiecznie zapisywane w przeglądarce i będą dostępne przy następnym otwarciu aplikacji. Możesz nadal korzystać ze wszystkich funkcji aplikacji.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Jak działa tryb offline?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        W trybie offline wszystkie Twoje dane są zapisywane lokalnie w przeglądarce. Możesz korzystać z wszystkich funkcji aplikacji, w tym dodawania wody, ustawiania przypomnień i przeglądania statystyk. Dane będą dostępne nawet bez połączenia internetowego.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-info">
+                <h3 class="form-title">Kontakt</h3>
+                <p>Masz pytania lub problemy? Skontaktuj się z nami:</p>
+                <p>Email: nozercode@proton.me</p>
+                <p>Discord: rezonoxo</p>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Globalne komunikaty -->
+    <div class="global-error" id="global-error"></div>
+    <div class="global-success" id="global-success"></div>
+    
+    <!-- Modal ustawiania celu -->
+    <div class="modal-overlay" id="goal-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-bullseye"></i>
+                    Ustaw dzienny cel nawodnienia
+                </div>
+                <button class="modal-close" id="close-goal-modal">&times;</button>
+            </div>
+            
+            <div class="goal-tabs">
+                <button class="goal-tab active" data-form="manual">Ręcznie</button>
+                <button class="goal-tab" data-form="calculate">Oblicz</button>
+            </div>
+            
+            <!-- Formularz ręcznego ustawiania -->
+            <div class="goal-form active" id="manual-form">
+                <h4>Ustaw cel ręcznie</h4>
+                <div class="form-group">
+                    <label for="manual-goal">Dzienny cel (ml)</label>
+                    <input type="number" id="manual-goal" min="500" max="5000" value="2000">
+                </div>
+                <button class="btn" id="set-manual-goal">Ustaw cel</button>
+            </div>
+            
+            <!-- Formularz obliczania -->
+            <div class="goal-form" id="calculate-form">
+                <h4>Oblicz cel na podstawie Twoich danych</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="weight">Waga (kg)</label>
+                        <input type="number" id="weight" min="30" max="200" placeholder="70">
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Wiek</label>
+                        <input type="number" id="age" min="1" max="120" placeholder="25">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="activity-level">Poziom aktywności</label>
+                    <select id="activity-level">
+                        <option value="low">Niska (siedzący tryb życia)</option>
+                        <option value="moderate" selected>Umiarkowana (lekka aktywność)</option>
+                        <option value="high">Wysoka (intensywne treningi)</option>
+                        <option value="very-high">Bardzo wysoka (zawodowy sportowiec)</option>
+                    </select>
+                </div>
+                <button class="calculate-btn" id="calculate-goal">
+                    <i class="fas fa-calculator"></i> Oblicz cel
+                </button>
+                <div class="result-display" id="calculation-result" style="display: none;">
+                    <div id="calculated-amount">0 ml</div>
+                    <div style="font-size: 14px; color: var(--gray); margin-top: 5px;">
+                        Zalecana ilość wody dziennie
+                    </div>
+                </div>
+                <button class="btn" id="set-calculated-goal" style="display: none;">Ustaw obliczony cel</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popup z ciekawostką -->
+    <div class="fact-popup" id="fact-popup">
+        <div class="fact-header">
+            <div class="fact-title">
+                <i class="fas fa-lightbulb"></i>
+                Czy wiesz, że?
+            </div>
+            <button class="close-btn" id="close-fact">&times;</button>
+        </div>
+        <div class="fact-content" id="fact-content">
+            Woda stanowi około 60% masy ciała dorosłego człowieka i jest niezbędna do prawidłowego funkcjonowania organizmu.
+        </div>
+    </div>
+
+    <script>
+        // Konfiguracja Supabase
+        const SUPABASE_URL = 'https://lqbgtinggnknyumewgda.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxxYmd0aW5nZ25rbnl1bWV3Z2RhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc1MDAwNTgsImV4cCI6MjA3MzA3NjA1OH0.qq51yALnkgg58lgaRWsYKRjFBWiIEJE_XJxKBzoXe_0';
+        
+        // Zmienna dla Supabase (zostanie zainicjalizowana później)
+        let supabase = null;
+        
+        // Dane aplikacji
+        let waterData = {
+            current: 0,
+            target: 2000,
+            history: [],
+            reminders: [],
+            goalAchieved: 0,
+            streak: 0
+        };
+        
+        // Stan uwierzytelniania
+        let currentUser = null;
+        let isAuthenticated = false;
+        
+        // Funkcja inicjalizacji Supabase
+        function initSupabase() {
+            try {
+                if (window.supabase) {
+                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    console.log('Supabase zainicjalizowany pomyślnie');
+                    
+                    // Sprawdź czy tabela istnieje (opcjonalnie)
+                    checkSupabaseTable();
+                    
+                    return true;
+                } else {
+                    console.error('Supabase SDK nie jest dostępny');
+                    // Pokaż komunikat użytkownikowi
+                    showGlobalError('Nie można załadować Supabase. Aplikacja będzie działać w trybie offline.', 10000);
+                    return false;
+                }
+            } catch (error) {
+                console.error('Błąd inicjalizacji Supabase:', error);
+                showGlobalError('Błąd inicjalizacji Supabase. Sprawdź połączenie internetowe.', 10000);
+                return false;
+            }
+        }
+        
+        // Funkcja sprawdzająca czy tabela istnieje w Supabase
+        async function checkSupabaseTable() {
+            if (!supabase) return;
+            
+            try {
+                // Spróbuj wykonać prosty zapytanie do tabeli
+                const { error } = await supabase
+                    .from('water_intake')
+                    .select('count')
+                    .limit(1);
+                
+                if (error) {
+                    console.warn('Tabela water_intake nie istnieje lub nie ma uprawnień:', error);
+                    showGlobalError('Tabela danych nie jest skonfigurowana. Dane będą zapisywane lokalnie.', 8000);
+                } else {
+                    console.log('Tabela water_intake jest dostępna');
+                }
+            } catch (error) {
+                console.warn('Nie można sprawdzić tabeli water_intake:', error);
+            }
+        }
+        
+        // Ciekawostki o wodzie
+        const waterFacts = [
+            "Woda stanowi około 60% masy ciała dorosłego człowieka i jest niezbędna do prawidłowego funkcjonowania organizmu.",
+            "Nawet lekkie odwodnienie może wpływać na nastrój, koncentrację i wydolność fizyczną.",
+            "Dorosły człowiek traci codziennie około 2-3 litrów wody przez oddychanie, pocenie się i inne funkcje organizmu.",
+            "Picie wody może przyspieszyć metabolizm nawet o 30% w ciągu 30-40 minut.",
+            "Optymalne nawodnienie poprawia elastyczność skóry i opóźnia pojawianie się zmarszczek.",
+            "Woda pomaga usuwać toksyny z organizmu i wspiera funkcjonowanie nerek.",
+            "Odwodnienie może powodować bóle głowy i migreny.",
+            "Picie wody przed posiłkiem może pomóc w utracie wagi, zmniejszając apetyt."
+        ];
+        
+        // Inicjalizacja po załadowaniu DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicjalizuj Supabase (nie przerywaj działania aplikacji jeśli się nie uda)
+            initSupabase();
+            
+            // Sprawdź status uwierzytelniania
+            checkAuthStatus();
+            
+            // Nawigacja
+            setupNavigation();
+            
+            // Obsługa przycisków wody
+            setupWaterButtons();
+            
+            // Obsługa przypomnień
+            setupReminders();
+            
+            // Inicjalizacja wykresu
+            initChart();
+            
+            // Pokazanie losowej ciekawostki
+            showRandomFact();
+            
+            // Obsługa uwierzytelniania
+            setupAuth();
+            
+            // Obsługa FAQ
+            setupFAQ();
+            
+            // Obsługa modala ustawiania celu
+            setupGoalModal();
+        });
+        
+        // Funkcja do ładowania danych
+        async function loadData() {
+            if (isAuthenticated && currentUser && supabase) {
+                try {
+                    // Pobierz dane z Supabase
+                    const { data, error } = await supabase
+                        .from('water_intake')
+                        .select('*')
+                        .eq('user_id', currentUser.id)
+                        .order('created_at', { ascending: false });
+                    
+                    if (!error && data && data.length > 0) {
+                        // Jeśli dane są w Supabase, użyj ich
+                        const latestData = data[0];
+                        waterData.current = latestData.current || 0;
+                        waterData.target = latestData.target || 2000;
+                        waterData.history = latestData.history || [];
+                        waterData.reminders = latestData.reminders || [];
+                        waterData.goalAchieved = latestData.goal_achieved || 0;
+                        waterData.streak = latestData.streak || 0;
+                        
+                        updateUI();
+                        setupNotificationReminders();
+                    } else {
+                        // Jeśli nie ma danych w Supabase, spróbuj załadować z localStorage
+                        const savedData = localStorage.getItem('hydrotrack_data');
+                        if (savedData) {
+                            waterData = JSON.parse(savedData);
+                            updateUI();
+                            setupNotificationReminders();
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Błąd ładowania z Supabase, ładuję z localStorage:', error);
+                    // Fallback do localStorage
+                    const savedData = localStorage.getItem('hydrotrack_data');
+                    if (savedData) {
+                        waterData = JSON.parse(savedData);
+                        updateUI();
+                        setupNotificationReminders();
+                    }
+                }
+            } else {
+                // Spróbuj załadować z localStorage
+                const savedData = localStorage.getItem('hydrotrack_data');
+                if (savedData) {
+                    waterData = JSON.parse(savedData);
+                    updateUI();
+                    setupNotificationReminders();
+                }
+            }
+        }
+        
+        // Funkcja do zapisywania danych
+        async function saveData() {
+            if (isAuthenticated && currentUser && supabase) {
+                try {
+                    // Spróbuj zapisać do Supabase - jeśli się nie uda, zapisz lokalnie
+                    const { error } = await supabase
+                        .from('water_intake')
+                        .upsert({
+                            user_id: currentUser.id,
+                            current: waterData.current,
+                            target: waterData.target,
+                            history: waterData.history,
+                            reminders: waterData.reminders,
+                            goal_achieved: waterData.goalAchieved,
+                            streak: waterData.streak
+                        });
+                    
+                    if (error) {
+                        console.warn('Błąd zapisu do Supabase, zapisuję lokalnie:', error);
+                        // Zapisz do localStorage jako fallback
+                        localStorage.setItem('hydrotrack_data', JSON.stringify(waterData));
+                        localStorage.setItem('hydrotrack_user_id', currentUser.id);
+                    } else {
+                        console.log('Dane zapisane do Supabase');
+                    }
+                } catch (error) {
+                    console.warn('Błąd zapisu do Supabase, zapisuję lokalnie:', error);
+                    // Zapisz do localStorage jako fallback
+                    localStorage.setItem('hydrotrack_data', JSON.stringify(waterData));
+                    localStorage.setItem('hydrotrack_user_id', currentUser.id);
+                }
+            } else {
+                // Zapisz do localStorage
+                localStorage.setItem('hydrotrack_data', JSON.stringify(waterData));
+            }
+        }
+        
+        // Funkcja do obsługi nawigacji
+        function setupNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    
+                    // Usuń klasę active ze wszystkich elementów
+                    navItems.forEach(navItem => {
+                        navItem.classList.remove('active');
+                    });
+                    
+                    // Dodaj klasę active do klikniętego elementu
+                    this.classList.add('active');
+                    
+                    // Ukryj wszystkie sekcje
+                    document.querySelectorAll('.section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Pokaż docelową sekcję
+                    document.getElementById(target).classList.add('active');
+                });
+            });
+        }
+        
+        // Funkcja do obsługi przycisków wody
+        function setupWaterButtons() {
+            const waterButtons = document.querySelectorAll('.water-btn');
+            
+            waterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.id === 'custom-water') {
+                        const amount = prompt('Podaj ilość wody w ml:');
+                        if (amount && !isNaN(amount) && amount > 0) {
+                            addWater(parseInt(amount));
+                        }
+                    } else {
+                        const amount = parseInt(this.getAttribute('data-amount'));
+                        addWater(amount);
+                    }
+                });
+            });
+        }
+        
+        // Funkcja dodająca wodę
+        async function addWater(amount) {
+            try {
+                waterData.current += amount;
+                
+                // Dodaj do historii
+                const now = new Date();
+                waterData.history.unshift({
+                    amount: amount,
+                    timestamp: now.toISOString(),
+                    time: now.toLocaleTimeString()
+                });
+                
+                // Ogranicz historię do 50 ostatnich wpisów
+                if (waterData.history.length > 50) {
+                    waterData.history = waterData.history.slice(0, 50);
+                }
+                
+                // Sprawdź, czy osiągnięto cel
+                if (waterData.current >= waterData.target && waterData.current - amount < waterData.target) {
+                    waterData.goalAchieved++;
+                    waterData.streak++;
+                    
+                    // Pokazuj powiadomienie o osiągnięciu celu
+                    handleSuccess('Gratulacje! Osiągnąłeś dzienny cel nawodnienia! 🎉');
+                }
+                
+                // Zapisz dane i zaktualizuj UI
+                await saveData();
+                updateUI();
+                
+                // Sprawdź czy dane zostały zapisane do Supabase czy lokalnie
+                const isSupabaseWorking = isAuthenticated && currentUser && supabase;
+                if (isSupabaseWorking) {
+                    handleSuccess(`Dodano ${amount} ml wody!`);
+                } else {
+                    handleSuccess(`Dodano ${amount} ml wody! (zapisano lokalnie)`);
+                }
+                
+            } catch (error) {
+                handleError(error, 'Dodawanie wody');
+            }
+        }
+        
+        // Funkcja aktualizująca UI
+        function updateUI() {
+            // Aktualizuj okrąg postępu
+            const progress = Math.min(100, (waterData.current / waterData.target) * 100);
+            document.getElementById('progress-circle').style.background = 
+                `conic-gradient(var(--primary) ${progress}%, var(--light) 0%)`;
+            
+            document.getElementById('progress-value').textContent = `${Math.round(progress)}%`;
+            document.getElementById('progress-target').textContent = `${waterData.current} / ${waterData.target} ml`;
+            
+            // Aktualizuj historię nawodnień
+            const logList = document.getElementById('hydration-log');
+            logList.innerHTML = '';
+            
+            waterData.history.slice(0, 10).forEach(entry => {
+                const logItem = document.createElement('div');
+                logItem.className = 'log-item';
+                logItem.innerHTML = `
+                    <span>${entry.amount} ml</span>
+                    <span>${entry.time}</span>
+                `;
+                logList.appendChild(logItem);
+            });
+            
+            // Aktualizuj statystyki
+            updateStatistics();
+        }
+        
+        // Funkcja do obliczania dzisiejszego spożycia
+        function calculateTodayIntake() {
+            const today = new Date().toDateString();
+            return waterData.history
+                .filter(entry => new Date(entry.timestamp).toDateString() === today)
+                .reduce((total, entry) => total + entry.amount, 0);
+        }
+        
+        // Funkcja aktualizująca statystyki
+        function updateStatistics() {
+            document.getElementById('stat-today').textContent = `${waterData.current} ml`;
+            document.getElementById('stat-today-percent').textContent = 
+                `${Math.round((waterData.current / waterData.target) * 100)}% celu`;
+            
+            // Tutaj dodaj bardziej zaawansowane obliczenia statystyk
+            // (to jest uproszczona wersja)
+            document.getElementById('stat-average').textContent = `${Math.round(waterData.current * 0.85)} ml`;
+            document.getElementById('stat-goal-days').textContent = waterData.goalAchieved;
+            document.getElementById('stat-streak').textContent = `${waterData.streak} dni`;
+        }
+        
+        // Funkcja do obsługi przypomnień
+        function setupReminders() {
+            const reminderType = document.getElementById('reminder-type');
+            const intervalGroup = document.getElementById('interval-group');
+            const timeGroup = document.getElementById('time-group');
+            
+            reminderType.addEventListener('change', function() {
+                if (this.value === 'interval') {
+                    intervalGroup.style.display = 'block';
+                    timeGroup.style.display = 'none';
+                } else {
+                    intervalGroup.style.display = 'none';
+                    timeGroup.style.display = 'block';
+                }
+            });
+            
+            document.getElementById('add-reminder').addEventListener('click', async function() {
+                try {
+                    const type = document.getElementById('reminder-type').value;
+                    let value;
+                    
+                    if (type === 'interval') {
+                        value = document.getElementById('reminder-interval').value;
+                    } else {
+                        value = document.getElementById('reminder-time').value;
+                    }
+                    
+                    // Sprawdź uprawnienia do powiadomień
+                    const hasPermission = await requestNotificationPermission();
+                    if (!hasPermission) {
+                        handleError('Brak uprawnień do powiadomień. Sprawdź ustawienia przeglądarki.');
+                        return;
+                    }
+                    
+                    // Wyczyść istniejące przypomnienia
+                    clearNotificationReminders();
+                    
+                    // Dodaj nowe przypomnienie
+                    waterData.reminders.push({ type, value });
+                    
+                    // Ustaw nowe powiadomienia
+                    setupNotificationReminders();
+                    
+                    await saveData();
+                    updateRemindersList();
+                    
+                    handleSuccess('Przypomnienie zostało dodane!');
+                    
+                } catch (error) {
+                    handleError(error, 'Dodawanie przypomnienia');
+                }
+            });
+            
+            // Obsługa przycisku testowania powiadomień
+            document.getElementById('test-notification').addEventListener('click', async function() {
+                try {
+                    const hasPermission = await requestNotificationPermission();
+                    if (!hasPermission) {
+                        handleError('Brak uprawnień do powiadomień. Sprawdź ustawienia przeglądarki.');
+                        return;
+                    }
+                    
+                    showNotification('HydroTrack - Test', {
+                        body: 'To jest testowe powiadomienie! 💧',
+                        tag: 'test-notification'
+                    });
+                    
+                    handleSuccess('Powiadomienie testowe zostało wysłane!');
+                    
+                } catch (error) {
+                    handleError(error, 'Testowanie powiadomień');
+                }
+            });
+        }
+        
+        // Funkcja aktualizująca listę przypomnień
+        function updateRemindersList() {
+            const remindersList = document.getElementById('reminders-list');
+            remindersList.innerHTML = '';
+            
+            waterData.reminders.forEach((reminder, index) => {
+                const reminderItem = document.createElement('div');
+                reminderItem.className = 'log-item';
+                
+                let text;
+                if (reminder.type === 'interval') {
+                    text = `Co ${reminder.value} minut`;
+                } else {
+                    text = `O ${reminder.value}`;
+                }
+                
+                reminderItem.innerHTML = `
+                    <span>${text}</span>
+                    <span>
+                        <button class="btn" data-index="${index}">Usuń</button>
+                    </span>
+                `;
+                
+                remindersList.appendChild(reminderItem);
+            });
+            
+            // Dodaj obsługę przycisku usuwania
+            document.querySelectorAll('#reminders-list .btn').forEach(button => {
+                button.addEventListener('click', async function() {
+                    try {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        
+                        // Wyczyść powiadomienia dla tego przypomnienia
+                        if (waterData.reminders[index].intervalId) {
+                            clearInterval(waterData.reminders[index].intervalId);
+                        }
+                        if (waterData.reminders[index].timeoutId) {
+                            clearTimeout(waterData.reminders[index].timeoutId);
+                        }
+                        
+                        waterData.reminders.splice(index, 1);
+                        await saveData();
+                        updateRemindersList();
+                        
+                        handleSuccess('Przypomnienie zostało usunięte!');
+                        
+                    } catch (error) {
+                        handleError(error, 'Usuwanie przypomnienia');
+                    }
+                });
+            });
+        }
+        
+        // Funkcja inicjalizująca wykres
+        function initChart() {
+            const ctx = document.getElementById('weekly-chart').getContext('2d');
+            
+            // Tutaj dodaj kod do tworzenia wykresu
+            // (to jest uproszczona wersja)
+            ctx.font = '16px Arial';
+            ctx.fillStyle = '#3498db';
+            ctx.fillText('Wykres tygodniowego nawodnienia', 50, 150);
+            ctx.fillText('Tutaj pojawią się Twoje statystyki', 60, 180);
+        }
+        
+        // Funkcja pokazująca losową ciekawostkę
+        function showRandomFact() {
+            const randomIndex = Math.floor(Math.random() * waterFacts.length);
+            document.getElementById('fact-content').textContent = waterFacts[randomIndex];
+            
+            document.getElementById('close-fact').addEventListener('click', function() {
+                document.getElementById('fact-popup').style.display = 'none';
+            });
+        }
+        
+        // Funkcje uwierzytelniania
+        async function checkAuthStatus() {
+            if (!supabase) {
+                console.log('Supabase nie jest zainicjalizowany, pokazuję sekcję logowania');
+                showAuthSection();
+                return;
+            }
+            
+            try {
+                const { data: { user }, error } = await supabase.auth.getUser();
+                if (error) throw error;
+                
+                if (user) {
+                    currentUser = user;
+                    isAuthenticated = true;
+                    showMainApp();
+                    updateUserInfo();
+                } else {
+                    showAuthSection();
+                }
+            } catch (error) {
+                console.log('Błąd sprawdzania statusu uwierzytelniania, pokazuję sekcję logowania:', error);
+                showAuthSection();
+            }
+        }
+        
+        async function login(email, password) {
+            if (!supabase) {
+                handleError('Supabase nie jest zainicjalizowany');
+                return;
+            }
+            
+            try {
+                showMessage('auth-error', '');
+                showMessage('auth-success', '');
+                
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) throw error;
+                
+                currentUser = data.user;
+                isAuthenticated = true;
+                showMessage('auth-success', 'Pomyślnie zalogowano!');
+                
+                setTimeout(() => {
+                    showMainApp();
+                    updateUserInfo();
+                }, 1000);
+                
+            } catch (error) {
+                handleError(error, 'Logowanie');
+                showMessage('auth-error', 'Błąd logowania: ' + error.message);
+            }
+        }
+        
+        async function register(name, email, password) {
+            if (!supabase) {
+                handleError('Supabase nie jest zainicjalizowany');
+                return;
+            }
+            
+            try {
+                showMessage('auth-error', '');
+                showMessage('auth-success', '');
+                
+                // Sprawdź czy hasła się zgadzają
+                const confirmPassword = document.getElementById('register-confirm').value;
+                if (password !== confirmPassword) {
+                    throw new Error('Hasła nie są identyczne');
+                }
+                
+                const { data, error } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            name: name
+                        }
+                    }
+                });
+                
+                if (error) throw error;
+                
+                showMessage('auth-success', 'Konto zostało utworzone! Sprawdź email w celu potwierdzenia.');
+                
+                // Przełącz na formularz logowania
+                setTimeout(() => {
+                    switchAuthForm('login');
+                }, 2000);
+                
+            } catch (error) {
+                handleError(error, 'Rejestracja');
+                showMessage('auth-error', 'Błąd rejestracji: ' + error.message);
+            }
+        }
+        
+        async function logout() {
+            if (!supabase) {
+                // Jeśli Supabase nie jest zainicjalizowany, po prostu wyczyść stan lokalny
+                currentUser = null;
+                isAuthenticated = false;
+                showAuthSection();
+                clearUserInfo();
+                return;
+            }
+            
+            try {
+                const { error } = await supabase.auth.signOut();
+                if (error) throw error;
+                
+                currentUser = null;
+                isAuthenticated = false;
+                showAuthSection();
+                clearUserInfo();
+                
+            } catch (error) {
+                handleError(error, 'Wylogowanie');
+            }
+        }
+        
+        function showAuthSection() {
+            document.getElementById('auth').classList.add('active');
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('notifications').classList.remove('active');
+            document.getElementById('statistics').classList.remove('active');
+            document.getElementById('help').classList.remove('active');
+            document.getElementById('user-info').classList.remove('active');
+            
+            // Usuń aktywną klasę z nawigacji
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Jeśli Supabase nie jest dostępny, pokaż informację o trybie offline
+            if (!supabase) {
+                showGlobalError('Aplikacja działa w trybie offline. Dane będą zapisywane lokalnie.', 8000);
+            }
+        }
+        
+        function showMainApp() {
+            document.getElementById('auth').classList.remove('active');
+            document.getElementById('dashboard').classList.add('active');
+            
+            // Pokaż informacje o użytkowniku tylko jeśli jest zalogowany
+            if (isAuthenticated && currentUser) {
+                document.getElementById('user-info').classList.add('active');
+            } else {
+                document.getElementById('user-info').classList.remove('active');
+            }
+            
+            // Ustaw aktywną nawigację na dashboard
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector('[data-target="dashboard"]').classList.add('active');
+            
+            // Załaduj dane użytkownika
+            loadData();
+        }
+        
+        function updateUserInfo() {
+            if (currentUser) {
+                const name = currentUser.user_metadata?.name || currentUser.email?.split('@')[0] || 'Użytkownik';
+                const initial = name.charAt(0).toUpperCase();
+                
+                document.getElementById('user-name').textContent = name;
+                document.getElementById('user-avatar').textContent = initial;
+            }
+        }
+        
+        function clearUserInfo() {
+            document.getElementById('user-name').textContent = 'Użytkownik';
+            document.getElementById('user-avatar').textContent = 'U';
+        }
+        
+        function showMessage(elementId, message) {
+            const element = document.getElementById(elementId);
+            if (message) {
+                element.textContent = message;
+                element.classList.add('active');
+            } else {
+                element.classList.remove('active');
+            }
+        }
+        
+        // Globalne funkcje obsługi błędów
+        function showGlobalError(message, duration = 5000) {
+            const errorElement = document.getElementById('global-error');
+            errorElement.textContent = message;
+            errorElement.classList.add('active');
+            
+            setTimeout(() => {
+                errorElement.classList.remove('active');
+            }, duration);
+        }
+        
+        function showGlobalSuccess(message, duration = 3000) {
+            const successElement = document.getElementById('global-success');
+            successElement.textContent = message;
+            successElement.classList.add('active');
+            
+            setTimeout(() => {
+                successElement.classList.remove('active');
+            }, duration);
+        }
+        
+        function handleError(error, context = '') {
+            console.error(`Błąd ${context}:`, error);
+            
+            let errorMessage = 'Wystąpił nieoczekiwany błąd';
+            
+            if (error.message) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            }
+            
+            if (context) {
+                errorMessage = `${context}: ${errorMessage}`;
+            }
+            
+            showGlobalError(errorMessage);
+        }
+        
+        function handleSuccess(message, context = '') {
+            console.log(`Sukces ${context}:`, message);
+            showGlobalSuccess(message);
+        }
+        
+        // Funkcje powiadomień przeglądarki
+        async function requestNotificationPermission() {
+            if ('Notification' in window) {
+                const permission = await Notification.requestPermission();
+                return permission === 'granted';
+            }
+            return false;
+        }
+        
+        function showNotification(title, options = {}) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                const notification = new Notification(title, {
+                    icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMzNDk4ZGIiLz4KPHBhdGggZD0iTTI0IDI4SDQwVjM2SDI0VjI4WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTI4IDMySDM2VjQwSDI4VjMyWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+',
+                    badge: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiMyN2FlNjAiLz4KPC9zdmc+',
+                    ...options
+                });
+                
+                // Automatycznie zamknij powiadomienie po 5 sekundach
+                setTimeout(() => {
+                    notification.close();
+                }, 5000);
+                
+                return notification;
+            }
+            return null;
+        }
+        
+        function setupNotificationReminders() {
+            waterData.reminders.forEach(reminder => {
+                if (reminder.type === 'interval') {
+                    const interval = parseInt(reminder.value) * 60 * 1000; // konwersja na milisekundy
+                    const reminderId = setInterval(() => {
+                        showNotification('HydroTrack - Przypomnienie', {
+                            body: 'Czas na szklankę wody! 💧',
+                            tag: 'water-reminder'
+                        });
+                    }, interval);
+                    
+                    // Zapisz ID interwału do przypomnienia
+                    reminder.intervalId = reminderId;
+                } else if (reminder.type === 'specific') {
+                    const [hours, minutes] = reminder.value.split(':');
+                    const now = new Date();
+                    const reminderTime = new Date();
+                    reminderTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+                    
+                    // Jeśli czas już minął dzisiaj, ustaw na jutro
+                    if (reminderTime <= now) {
+                        reminderTime.setDate(reminderTime.getDate() + 1);
+                    }
+                    
+                    const timeUntilReminder = reminderTime.getTime() - now.getTime();
+                    
+                    const timeoutId = setTimeout(() => {
+                        showNotification('HydroTrack - Przypomnienie', {
+                            body: 'Czas na szklankę wody! 💧',
+                            tag: 'water-reminder'
+                        });
+                        
+                        // Ustaw następne przypomnienie na jutro
+                        const nextReminder = new Date();
+                        nextReminder.setDate(nextReminder.getDate() + 1);
+                        nextReminder.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+                        
+                        const nextTimeout = setTimeout(() => {
+                            showNotification('HydroTrack - Przypomnienie', {
+                                body: 'Czas na szklankę wody! 💧',
+                                tag: 'water-reminder'
+                            });
+                        }, nextReminder.getTime() - Date.now());
+                        
+                        reminder.timeoutId = nextTimeout;
+                    }, timeUntilReminder);
+                    
+                    reminder.timeoutId = timeoutId;
+                }
+            });
+        }
+        
+        function clearNotificationReminders() {
+            waterData.reminders.forEach(reminder => {
+                if (reminder.intervalId) {
+                    clearInterval(reminder.intervalId);
+                    delete reminder.intervalId;
+                }
+                if (reminder.timeoutId) {
+                    clearTimeout(reminder.timeoutId);
+                    delete reminder.timeoutId;
+                }
+            });
+        }
+        
+        // Funkcja obsługi modala ustawiania celu
+        function setupGoalModal() {
+            const goalModal = document.getElementById('goal-modal');
+            const closeModal = document.getElementById('close-goal-modal');
+            const progressTarget = document.getElementById('progress-target');
+            
+            // Obsługa kliknięcia na cel nawodnienia
+            progressTarget.addEventListener('click', function() {
+                goalModal.classList.add('active');
+                // Ustaw aktualny cel w formularzu ręcznym
+                document.getElementById('manual-goal').value = waterData.target;
+            });
+            
+            // Obsługa zamykania modala
+            closeModal.addEventListener('click', function() {
+                goalModal.classList.remove('active');
+            });
+            
+            // Zamykanie modala po kliknięciu w tło
+            goalModal.addEventListener('click', function(e) {
+                if (e.target === goalModal) {
+                    goalModal.classList.remove('active');
+                }
+            });
+            
+            // Zamykanie modala klawiszem ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && goalModal.classList.contains('active')) {
+                    goalModal.classList.remove('active');
+                }
+            });
+            
+            // Obsługa przełączania zakładek
+            document.querySelectorAll('.goal-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const formType = this.getAttribute('data-form');
+                    switchGoalForm(formType);
+                });
+            });
+            
+            // Obsługa ręcznego ustawiania celu
+            document.getElementById('set-manual-goal').addEventListener('click', function() {
+                const newGoal = parseInt(document.getElementById('manual-goal').value);
+                if (newGoal >= 500 && newGoal <= 5000) {
+                    setWaterGoal(newGoal);
+                    goalModal.classList.remove('active');
+                } else {
+                    handleError('Cel musi być między 500 a 5000 ml');
+                }
+            });
+            
+            // Obsługa obliczania celu
+            document.getElementById('calculate-goal').addEventListener('click', function() {
+                calculateWaterGoal();
+            });
+            
+            // Obsługa ustawiania obliczonego celu
+            document.getElementById('set-calculated-goal').addEventListener('click', function() {
+                const calculatedAmount = parseInt(document.getElementById('calculated-amount').textContent);
+                setWaterGoal(calculatedAmount);
+                goalModal.classList.remove('active');
+            });
+        }
+        
+        function switchGoalForm(formType) {
+            // Przełącz zakładki
+            document.querySelectorAll('.goal-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-form="${formType}"]`).classList.add('active');
+            
+            // Przełącz formularze
+            document.querySelectorAll('.goal-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById(`${formType}-form`).classList.add('active');
+        }
+        
+        function calculateWaterGoal() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const age = parseInt(document.getElementById('age').value);
+            const activityLevel = document.getElementById('activity-level').value;
+            
+            if (!weight || !age) {
+                handleError('Wprowadź wagę i wiek');
+                return;
+            }
+            
+            // Podstawowe obliczenie: 35ml na kg masy ciała
+            let baseAmount = weight * 35;
+            
+            // Dostosowanie do wieku
+            if (age < 18) {
+                baseAmount *= 0.9; // Młodzież potrzebuje mniej wody
+            } else if (age > 65) {
+                baseAmount *= 0.8; // Osoby starsze potrzebują mniej wody
+            }
+            
+            // Dostosowanie do poziomu aktywności
+            const activityMultipliers = {
+                'low': 1.0,
+                'moderate': 1.2,
+                'high': 1.5,
+                'very-high': 1.8
+            };
+            
+            baseAmount *= activityMultipliers[activityLevel];
+            
+            // Zaokrąglij do najbliższej 50ml
+            const finalAmount = Math.round(baseAmount / 50) * 50;
+            
+            // Pokaż wynik
+            document.getElementById('calculated-amount').textContent = `${finalAmount} ml`;
+            document.getElementById('calculation-result').style.display = 'block';
+            document.getElementById('set-calculated-goal').style.display = 'block';
+        }
+        
+        function setWaterGoal(newGoal) {
+            waterData.target = newGoal;
+            updateUI();
+            saveData();
+            handleSuccess(`Cel nawodnienia ustawiony na ${newGoal} ml!`);
+        }
+        
+        function switchAuthForm(formType) {
+            // Przełącz zakładki
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-form="${formType}"]`).classList.add('active');
+            
+            // Przełącz formularze
+            document.querySelectorAll('.auth-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById(`${formType}-form`).classList.add('active');
+            
+            // Wyczyść komunikaty
+            showMessage('auth-error', '');
+            showMessage('auth-success', '');
+        }
+        
+        // Funkcja obsługi FAQ
+        function setupFAQ() {
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    // Zamknij wszystkie inne FAQ
+                    faqQuestions.forEach(otherQuestion => {
+                        if (otherQuestion !== this) {
+                            otherQuestion.classList.remove('active');
+                            otherQuestion.nextElementSibling.classList.remove('active');
+                        }
+                    });
+                    
+                    // Przełącz aktualne FAQ
+                    this.classList.toggle('active');
+                    answer.classList.toggle('active');
+                });
+            });
+        }
+        
+        function setupAuth() {
+            // Obsługa przełączania zakładek
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const formType = this.getAttribute('data-form');
+                    switchAuthForm(formType);
+                });
+            });
+            
+            // Obsługa formularza logowania
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                login(email, password);
+            });
+            
+            // Obsługa formularza rejestracji
+            document.getElementById('register-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                register(name, email, password);
+            });
+            
+            // Obsługa wylogowania
+            document.getElementById('logout-btn').addEventListener('click', logout);
+            
+            // Obsługa kontynuacji bez logowania
+            document.getElementById('continue-offline').addEventListener('click', function() {
+                // Ustaw tryb offline
+                currentUser = null;
+                isAuthenticated = false;
+                
+                // Załaduj dane z localStorage
+                const savedData = localStorage.getItem('hydrotrack_data');
+                if (savedData) {
+                    waterData = JSON.parse(savedData);
+                }
+                
+                // Pokaż główną aplikację
+                showMainApp();
+                
+                // Pokaż komunikat o trybie offline
+                showGlobalSuccess('Kontynuujesz w trybie offline. Dane będą zapisywane lokalnie.', 5000);
+            });
+        }
+    </script>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</body>
+</html>
