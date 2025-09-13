@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Discord Fake Message</title>
+<style>
+  body{
+    background:#36393f;
+    font-family: "gg sans","Whitney","Helvetica Neue",Arial,sans-serif;
+    color:#dcddde;
+    padding:20px;
+  }
+  .controls{
+    max-width:340px;
+    background:#2f3136;
+    padding:16px;
+    border-radius:8px;
+    margin-bottom:20px;
+  }
+  label{display:block;font-size:12px;color:#b5bac1;margin:8px 0 4px;}
+  input,textarea{
+    width:100%;background:#202225;color:#dcddde;border:none;
+    border-radius:4px;padding:8px;font-size:14px;
+  }
+  textarea{resize:vertical;min-height:80px;}
+  button{margin-top:12px;padding:8px 12px;border:none;
+    border-radius:4px;background:#5865f2;color:white;cursor:pointer;font-weight:600}
+  .preview{
+    background:#36393f;
+    padding:16px;
+    border-radius:8px;
+    max-width:600px;
+  }
+  
+
+  /* Discord message look */
+  .message{
+    display:flex;gap:12px;align-items:flex-start;
+  }
+  .avatar{
+    width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;
+  }
+  .avatar img{width:100%;height:100%;object-fit:cover}
+  .content{flex:1}
+  .header{display:flex;align-items:baseline;gap:6px}
+  .username{font-weight:600;font-size:16px;color:#fff}
+  .timestamp{font-size:12px;color:#b9bbbe}
+  .text{margin-top:2px;font-size:16px;line-height:1.375;white-space:pre-wrap}
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <label>Nazwa użytkownika (np. "! nozer ⚡FK")</label>
+  <input id="username" value="Discord">
+  <label>Treść wiadomości</label>
+  <textarea id="message"></textarea>
+  <label>Awatar</label>
+  <input id="avatarFile" type="file" accept="image/*">
+  <label>Data i czas</label>
+  <input id="customDate" type="datetime-local">
+  <button id="update">Odśwież</button>
+  <button id="export">Eksportuj PNG</button>
+</div>
+
+<div class="preview" id="previewArea">
+  <div class="message">
+    <div class="avatar" id="pvAvatar">
+      <img src="https://cdn.discordapp.com/embed/avatars/0.png">
+    </div>
+    <div class="content">
+      <div class="header">
+        <span class="username" id="pvName">! nozer ⚡FK</span>
+        <span class="timestamp" id="pvTime">09:49</span>
+      </div>
+      <div class="text" id="pvMsg">Test wiad</div>
+    </div>
+  </div>
+</div>
+
+<!-- html2canvas CDN -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+const username = document.getElementById('username');
+const message = document.getElementById('message');
+const avatarFile = document.getElementById('avatarFile');
+const customDate = document.getElementById('customDate');
+const pvName = document.getElementById('pvName');
+const pvMsg = document.getElementById('pvMsg');
+const pvTime = document.getElementById('pvTime');
+const pvAvatar = document.getElementById('pvAvatar');
+
+let avatarDataUrl = null;
+
+function formatTimestamp(date){
+  const now = new Date();
+  const opts = {hour:'2-digit', minute:'2-digit'};
+  const diff = now.setHours(0,0,0,0) - new Date(date).setHours(0,0,0,0);
+
+  if(diff === 0){
+    return date.toLocaleTimeString([],opts);
+  } else if(diff === 86400000){
+    return 'Wczoraj o ' + date.toLocaleTimeString([],opts);
+  } else {
+    return date.toLocaleDateString([], {day:'numeric', month:'short'}) +
+      ' o ' + date.toLocaleTimeString([],opts);
+  }
+}
+
+function updatePreview(){
+  pvName.textContent = username.value;
+  pvMsg.textContent = message.value;
+  
+  let date = customDate.value ? new Date(customDate.value) : new Date();
+  pvTime.textContent = formatTimestamp(date);
+
+  if(avatarDataUrl){
+    pvAvatar.innerHTML = `<img src="${avatarDataUrl}">`;
+  }else{
+    pvAvatar.innerHTML = `<img src="https://cdn.discordapp.com/embed/avatars/0.png">`;
+  }
+}
+document.getElementById('update').onclick = ()=>{ updatePreview(); }
+
+avatarFile.onchange = e=>{
+  const f = e.target.files[0];
+  if(!f){avatarDataUrl=null;updatePreview();return;}
+  const r=new FileReader();
+  r.onload=()=>{avatarDataUrl=r.result;updatePreview();}
+  r.readAsDataURL(f);
+};
+
+// export PNG
+document.getElementById('export').onclick = ()=>{
+  html2canvas(document.getElementById('previewArea'),{backgroundColor:null,scale:2}).then(c=>{
+    const link=document.createElement('a');
+    link.download='discord_message.png';
+    link.href=c.toDataURL();
+    link.click();
+  });
+};
+
+updatePreview();
+</script>
+</body>
+</html>
