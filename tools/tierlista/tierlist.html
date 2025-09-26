@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tier Lista | Nozertools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1976d2;
+            --primary-dark: #1565c0;
+            --primary-light: #42a5f5;
+            --secondary: #f57c00;
+            --secondary-dark: #e65100;
+            --surface: #ffffff;
+            --surface-rgb: 255, 255, 255;
+            --background: #f5f5f5;
+            --on-surface: #212121;
+            --on-primary: #ffffff;
+            --error: #d32f2f;
+            --error-rgb: 211, 47, 47;
+            --shadow: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-hover: 0 4px 8px rgba(0,0,0,0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+        }
+
+        .dark-mode {
+            --primary: #3b82a6;
+            --primary-dark: #326b87;
+            --primary-light: #5fa3c6;
+            --secondary: #c48b3a;
+            --secondary-dark: #a4712f;
+            --surface: #16191b;
+            --surface-rgb: 22, 25, 27;
+            --background: #0f1315;
+            --on-surface: #dceff6;
+            --on-primary: #f5f8fa;
+            --error: #ff6b6b;
+            --error-rgb: 255,107,107;
+            --shadow: 0 6px 14px rgba(0,0,0,0.55);
+            --shadow-hover: 0 10px 22px rgba(0,0,0,0.65);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: var(--background);
+            color: var(--on-surface);
+            margin: 0;
+            min-height: 100vh;
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--primary);
+            color: var(--on-primary);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+        }
+
+        .logo-accent {
+            color: #ffcc80;
+            font-weight: 800;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--on-primary);
+            border: none;
+            border-radius: 24px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .btn-small:hover{
+            color: var(--primary);
+            background-color: var(--background);
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: var(--on-primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background: var(--surface);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .app-layout {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .sidebar {
+            flex: 0 0 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .panel {
+            background: var(--surface);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tray-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            background: var(--primary);
+        }
+
+        .btn-small i {
+            font-size: 1.1rem;
+        }
+
+        .search-section {
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 24px;
+            font-size: 1rem;
+            background: var(--surface);
+            color: var(--on-surface);
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+
+        .search-btn {
+            background: var(--primary);
+            color: var(--on-primary);
+            border: none;
+            border-radius: 24px;
+            padding: 0 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .search-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .pexels-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .pexels-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .pexels-img:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .tray {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            min-height: 120px;
+            background: var(--background);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            align-items: flex-start;
+        }
+
+        .tray-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .tray-img, .tier-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            cursor: grab;
+            border: 2px solid transparent;
+            background: var(--surface);
+            transition: var(--transition);
+        }
+
+        .tray-img:hover, .tier-img:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .tray-img:active, .tier-img:active {
+            cursor: grabbing;
+            border-color: var(--primary-dark);
+        }
+
+        .caption-input {
+            width: 100px;
+            padding: 6px 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            background: var(--surface);
+            color: var(--on-surface);
+            text-align: center;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .caption-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--error);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .tray-item:hover .remove-btn, .tier-item:hover .remove-btn {
+            opacity: 1;
+        }
+
+        .remove-btn:hover {
+            background: #b71c1c;
+            transform: scale(1.1);
+        }
+
+        .tiers-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .tier-row {
+            display: flex;
+            align-items: stretch;
+            background: var(--background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .tier-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--on-primary);
+            background: var(--primary);
+            padding: 1rem;
+            transition: var(--transition);
+            z-index: 1;
+        }
+
+        .tier-row:hover .remove-btn {
+            opacity: 1;
+        }
+
+        .tier-row > .remove-btn {
+            position: absolute;
+            top: var(--spacing-xs);
+            right: var(--spacing-xs);
+            z-index: 2;
+            background: rgba(var(--error-rgb), 0.85);
+            backdrop-filter: blur(2px);
+        }
+
+        .tier-row > .remove-btn:hover {
+            background: var(--error);
+        }
+
+        .tier-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1rem;
+            flex: 1;
+            min-height: 120px;
+        }
+
+        .tier-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .tier-caption {
+            font-size: 0.85rem;
+            max-width: 100px;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        .add-tier-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            background: var(--primary);
+            color: var(--on-primary);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .add-tier-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: #9e9e9e;
+            text-align: center;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .presentation-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--surface);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: clamp(1rem, 3vw, 2rem);
+            scroll-behavior: smooth;
+            overscroll-behavior: contain;
+        }
+
+        .presentation-mode::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .presentation-mode::-webkit-scrollbar-track {
+            background: var(--background);
+            border-radius: 4px;
+        }
+
+        .presentation-mode::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .presentation-tier {
+            background: var(--background);
+            border-radius: var(--border-radius);
+            margin-bottom: clamp(1.5rem, 4vh, 3rem);
+            padding: clamp(1rem, 3vw, 2rem);
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.3s ease-out;
+            max-width: min(1200px, 90vw);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .presentation-label {
+            font-size: clamp(1.25rem, 4vw, 2rem);
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: clamp(1rem, 3vh, 2rem);
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid currentColor;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .presentation-label::before {
+            content: '▸';
+            color: currentColor;
+            font-size: 1.2em;
+        }
+
+        .presentation-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(140px, 100%), 1fr));
+            gap: clamp(1rem, 3vw, 2rem);
+            place-items: center;
+            padding: 0.5rem;
+        }
+
+        .presentation-img {
+            width: clamp(100px, 25vw, 180px);
+            height: clamp(100px, 25vw, 180px);
+            object-fit: cover;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .presentation-img:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+
+        .presentation-caption {
+            text-align: center;
+            margin-top: 0.75rem;
+            font-weight: 500;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+            max-width: clamp(100px, 25vw, 180px);
+            color: var(--on-surface);
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+            padding: 0.25rem;
+        }
+
+        .presentation-caption:hover {
+            opacity: 1;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            color: #757575;
+            font-size: 0.9rem;
+        }
+
+        .footer-accent {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Responsywność */
+        @media (max-width: 1100px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .app-layout {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 0.75rem;
+                border-radius: 0;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .logo-text {
+                font-size: 1.4rem;
+            }
+            
+            .controls {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 0.5rem;
+                padding: 0 0.5rem;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+                padding: 0.5rem;
+                font-size: 0.85rem;
+            }
+
+            .btn i {
+                font-size: 1.2rem;
+            }
+            
+            .tier-label {
+                min-width: 50px;
+                font-size: 1.2rem;
+                position: relative;
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .tray-img, .tier-img {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .caption-input {
+                width: 80px;
+                font-size: 0.8rem;
+            }
+            
+            .tier-row {
+                position: relative;
+                margin-bottom: 0.5rem;
+            }
+            
+            .tier-row .remove-btn {
+                top: 8px;
+                right: 8px;
+                opacity: 1;
+                background: rgba(var(--error-rgb, 211, 47, 47), 0.9);
+            }
+            
+            .presentation-mode {
+                padding: 0.5rem;
+            }
+
+            .presentation-tier {
+                margin-bottom: 1rem;
+                padding: 0.75rem;
+            }
+            
+            .presentation-items {
+                gap: 0.75rem;
+                padding: 0;
+            }
+
+            .presentation-img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .presentation-caption {
+                font-size: 0.8rem;
+                margin-top: 0.5rem;
+            }
+
+            .container {
+                margin: 0.5rem;
+                padding: 0.75rem;
+            }
+
+            .panel {
+                padding: 1rem;
+            }
+
+            .tray {
+                padding: 1rem;
+                gap: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 0.5rem;
+                padding: 1rem;
+            }
+            
+            .tier-label {
+                min-width: 50px;
+                font-size: 1rem;
+                padding: 0.5rem;
+            }
+            
+            .tray-img, .tier-img {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .caption-input {
+                width: 70px;
+            }
+            
+            .pexels-results {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            }
+            
+            .pexels-img {
+                height: 90px;
+            }
+            
+            .presentation-img {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .presentation-items {
+                gap: 1rem;
+            }
+            
+            .presentation-caption {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Animacje */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Przeciąganie */
+        .dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        .drop-zone {
+            background: rgba(25, 118, 210, 0.1);
+            border: 2px dashed var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="material-icons">photo_library</i>
+                <div class="logo-text"><span class="logo-accent">PEXELS</span> TIER LISTA</div>
+            </div>
+            <div class="controls">
+                <button class="btn" onclick="toggleDarkMode()" id="darkModeBtn">
+                    <i class="material-icons">dark_mode</i> Tryb ciemny
+                </button>
+                <button class="btn" onclick="enterPresentationMode()">
+                    <i class="material-icons">slideshow</i> Prezentacja
+                </button>
+                <button class="btn" onclick="toggleTrayPosition()" id="trayPosBtn">
+                    <i class="material-icons">view_sidebar</i> Pozycja przybornika
+                </button>
+                <button class="btn" onclick="toggleConfirmations()" id="confirmationsBtn">
+                    <i class="material-icons">notifications_off</i> Potwierdzenia
+                </button>
+                <button class="btn" onclick="resetTierList()" style="background: var(--error);">
+                    <i class="material-icons">restart_alt</i> Reset
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="app-layout" id="appLayout">
+            <div class="sidebar">
+                <div class="panel">
+                    <div class="panel-title">
+                        <i class="material-icons">search</i> Wyszukiwarka Pexels
+                    </div>
+                    <div class="search-section">
+                        <div class="search-bar">
+                            <input id="pexels-query" type="text" class="search-input" placeholder="Wyszukaj zdjęcia (np. koty, samochody)...">
+                            <button class="search-btn" onclick="searchPexels()">Szukaj</button>
+                        </div>
+                        <div class="pexels-results" id="pexels-results">
+                            <div class="empty-state">
+                                <i class="material-icons">search</i>
+                                <p>Wpisz zapytanie, aby wyszukać zdjęcia</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-title">
+                        <i class="material-icons">inventory_2</i> Przybornik
+                    </div>
+                    <div class="tray-controls">
+                        <button class="btn btn-small" onclick="document.getElementById('localImageInput').click()">
+                            <i class="material-icons">upload_file</i> Z komputera
+                        </button>
+                        <button class="btn btn-small" onclick="addTextItem()">
+                            <i class="material-icons">text_fields</i> Dodaj tekst
+                        </button>
+                        <input type="file" id="localImageInput" accept="image/*" style="display: none;" onchange="handleLocalImage(event)">
+                    </div>
+                    <div class="tray" id="tray">
+                        <div class="empty-state">
+                            <i class="material-icons">photo_library</i>
+                            <p>Przeciągnij zdjęcia tutaj lub wyszukaj nowe</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="panel">
+                    <div class="panel-title">
+                        <i class="material-icons">star</i> Twoja Tier Lista
+                    </div>
+                    <div class="tiers-container" id="tiers">
+                        <!-- Tiers will be rendered here -->
+                    </div>
+                    <button class="add-tier-btn" onclick="addTier()">
+                        <i class="material-icons">add</i> Dodaj nowy tier
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Wykonano w ramach projektu <span class="footer-accent">Nozertools</span>
+    </footer>
+
+    <script>
+        // --- KONFIGURACJA ---
+        const PEXELS_API_KEY = 'sFuzPGhFz8C8pyO6zjSfSOiYqPmZyjyqyFXEtzE86ELmB3S5KEmnbEtB';
+        
+        // --- STAN APLIKACJI ---
+        let tray = [];
+        const defaultTiers = [
+            { label: 'S', items: [], color: '#ff5252' },
+            { label: 'A', items: [], color: '#ff9800' },
+            { label: 'B', items: [], color: '#ffeb3b' },
+            { label: 'C', items: [], color: '#4caf50' }
+        ];
+        let tiers = JSON.parse(JSON.stringify(defaultTiers));
+        let traySide = true;
+        let presentationActive = false;
+        let dragData = null;
+        let confirmationsEnabled = localStorage.getItem('tierlist_confirmations') !== 'disabled';
+
+        function resetTierList() {
+            if (showConfirmation('Czy na pewno chcesz zresetować tier listę?\nWszystkie elementy z tierów zostaną przeniesione do przybornika.')) {
+                // Zbierz wszystkie elementy z tierów
+                const allItems = tiers.reduce((items, tier) => [...items, ...tier.items], []);
+                
+                // Przenieś je do przybornika
+                tray.push(...allItems);
+                
+                // Resetuj tiery do domyślnych ustawień
+                tiers = JSON.parse(JSON.stringify(defaultTiers));
+                
+                // Odśwież interfejs
+                renderTiers();
+                renderTray();
+                
+                // Pokaż powiadomienie
+                const notification = document.createElement('div');
+                notification.textContent = `Lista została zresetowana. ${allItems.length} element(ów) przeniesiono do przybornika.`;
+                notification.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    background: var(--primary);
+                    color: white;
+                    padding: 10px 20px;
+                    border-radius: 4px;
+                    z-index: 1000;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                    animation: fadeIn 0.3s ease-out;
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => document.body.removeChild(notification), 300);
+                }, 3000);
+            }
+        }
+
+        // --- RENDEROWANIE INTERFEJSU ---
+        function renderTiers() {
+            const tiersDiv = document.getElementById('tiers');
+            tiersDiv.innerHTML = '';
+            
+            if (tiers.length === 0) {
+                tiersDiv.innerHTML = `
+                    <div class="empty-state">
+                        <i class="material-icons">star_outline</i>
+                        <p>Dodaj pierwszy tier, aby rozpocząć tworzenie listy</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            tiers.forEach((tier, idx) => {
+                const row = document.createElement('div');
+                row.className = 'tier-row fade-in';
+                row.ondragover = e => {
+                    e.preventDefault();
+                    row.classList.add('drop-zone');
+                };
+                row.ondragleave = e => {
+                    if (!row.contains(e.relatedTarget)) {
+                        row.classList.remove('drop-zone');
+                    }
+                };
+                row.ondrop = e => {
+                    e.preventDefault();
+                    row.classList.remove('drop-zone');
+                    onDrop(e, idx);
+                };
+
+                const label = document.createElement('div');
+                label.className = 'tier-label';
+                label.style.background = tier.color;
+                label.textContent = tier.label;
+                label.title = 'Kliknij dwukrotnie, aby edytować';
+                label.ondblclick = () => editTierLabel(idx);
+                row.appendChild(label);
+
+                const itemsDiv = document.createElement('div');
+                itemsDiv.className = 'tier-items';
+                
+                if (tier.items.length === 0) {
+                    const emptyMsg = document.createElement('div');
+                    emptyMsg.className = 'empty-state';
+                    emptyMsg.style.padding = '1rem';
+                    emptyMsg.innerHTML = `
+                        <i class="material-icons">add_photo_alternate</i>
+                        <p>Przeciągnij zdjęcia tutaj</p>
+                    `;
+                    itemsDiv.appendChild(emptyMsg);
+                } else {
+                    tier.items.forEach((item, imgIdx) => {
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'tier-item';
+                        wrapper.draggable = true;
+                        wrapper.ondragstart = e => onDragStart(e, idx, imgIdx);
+                        wrapper.ondragend = () => wrapper.classList.remove('dragging');
+
+                        const image = document.createElement('img');
+                        image.src = item.img;
+                        image.className = 'tier-img';
+                        image.alt = item.caption || 'Obraz tier listy';
+                        wrapper.appendChild(image);
+
+                        const caption = document.createElement('div');
+                        caption.className = 'tier-caption';
+                        caption.textContent = item.caption || '';
+                        wrapper.appendChild(caption);
+
+                        const removeBtn = document.createElement('button');
+                        removeBtn.className = 'remove-btn';
+                        removeBtn.innerHTML = '<i class="material-icons">close</i>';
+                        removeBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            removeFromTier(idx, imgIdx);
+                        };
+                        wrapper.appendChild(removeBtn);
+
+                        itemsDiv.appendChild(wrapper);
+                    });
+                }
+                
+                row.appendChild(itemsDiv);
+
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-btn';
+                removeBtn.innerHTML = '<i class="material-icons">delete</i>';
+                removeBtn.onclick = () => removeTier(idx);
+                removeBtn.title = 'Usuń tier';
+                row.appendChild(removeBtn);
+
+                tiersDiv.appendChild(row);
+            });
+            
+            updateTrayPosition();
+            saveTierList(true);
+        }
+
+        function renderTray() {
+            const trayDiv = document.getElementById('tray');
+            
+            if (tray.length === 0) {
+                trayDiv.innerHTML = `
+                    <div class="empty-state">
+                        <i class="material-icons">photo_library</i>
+                        <p>Przeciągnij zdjęcia tutaj lub wyszukaj nowe</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            trayDiv.innerHTML = '';
+            tray.forEach((item, idx) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'tray-item fade-in';
+                wrapper.draggable = true;
+                wrapper.ondragstart = e => {
+                    dragData = { trayIdx: idx };
+                    wrapper.classList.add('dragging');
+                };
+                wrapper.ondragend = () => wrapper.classList.remove('dragging');
+
+                const img = document.createElement('img');
+                img.src = item.img;
+                img.className = 'tray-img';
+                img.alt = item.caption || 'Obraz w przyborniku';
+                wrapper.appendChild(img);
+
+                const input = document.createElement('input');
+                input.className = 'caption-input';
+                input.placeholder = 'Podpis...';
+                input.value = item.caption || '';
+                input.onchange = e => {
+                    item.caption = input.value;
+                    saveTierList(true);
+                };
+                wrapper.appendChild(input);
+
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-btn';
+                removeBtn.innerHTML = '<i class="material-icons">close</i>';
+                removeBtn.onclick = () => {
+                    tray.splice(idx, 1);
+                    renderTray();
+                };
+                wrapper.appendChild(removeBtn);
+
+                trayDiv.appendChild(wrapper);
+            });
+        }
+
+        function updateTrayPosition() {
+            const appLayout = document.getElementById('appLayout');
+            const trayPosBtn = document.getElementById('trayPosBtn');
+            
+            if (traySide) {
+                appLayout.style.flexDirection = 'row';
+                trayPosBtn.innerHTML = '<i class="material-icons">view_sidebar</i> Przybornik z boku';
+            } else {
+                appLayout.style.flexDirection = 'column-reverse';
+                trayPosBtn.innerHTML = '<i class="material-icons">view_day</i> Przybornik na dole';
+            }
+        }
+
+        // --- OPERACJE NA TIERACH ---
+        function addTier() {
+            const label = prompt('Podaj nazwę nowego tieru:');
+            if (label && label.trim().length > 0) {
+                const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', 
+                               '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50',
+                               '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                tiers.push({ 
+                    label: label.trim(), 
+                    items: [], 
+                    color: randomColor 
+                });
+                renderTiers();
+            }
+        }
+
+        function toggleConfirmations() {
+            confirmationsEnabled = !confirmationsEnabled;
+            localStorage.setItem('tierlist_confirmations', confirmationsEnabled ? 'enabled' : 'disabled');
+            
+            const btn = document.getElementById('confirmationsBtn');
+            if (confirmationsEnabled) {
+                btn.innerHTML = '<i class="material-icons">notifications_off</i> Potwierdzenia';
+            } else {
+                btn.innerHTML = '<i class="material-icons">notifications</i> Potwierdzenia wył.';
+            }
+
+            // Pokaż powiadomienie
+            const notification = document.createElement('div');
+            notification.textContent = `Potwierdzenia zostały ${confirmationsEnabled ? 'włączone' : 'wyłączone'}`;
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--primary);
+                color: white;
+                padding: 10px 20px;
+                border-radius: 4px;
+                z-index: 1000;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                animation: fadeIn 0.3s ease-out;
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 2000);
+        }
+
+        function showConfirmation(message) {
+            return !confirmationsEnabled || confirm(message);
+        }
+
+        function removeTier(idx) {
+            if (tiers.length <= 1) {
+                alert('Musisz mieć przynajmniej jeden tier!');
+                return;
+            }
+            
+            if (showConfirmation(`Czy na pewno chcesz usunąć tier "${tiers[idx].label}"?\nWszystkie elementy zostaną przeniesione do przybornika.`)) {
+                const itemsToMove = tiers[idx].items;
+                tiers.splice(idx, 1);
+                
+                // Animacja usuwania
+                const tierRows = document.querySelectorAll('.tier-row');
+                if (tierRows[idx]) {
+                    tierRows[idx].style.transform = 'translateX(100%)';
+                    tierRows[idx].style.opacity = '0';
+                }
+                
+                // Przenieś elementy z usuwanego tieru do przybornika
+                setTimeout(() => {
+                    tray.push(...itemsToMove);
+                    renderTiers();
+                    renderTray();
+                    
+                    // Pokaż powiadomienie
+                    const notification = document.createElement('div');
+                    notification.textContent = `Tier został usunięty, a ${itemsToMove.length} element(ów) przeniesiono do przybornika`;
+                    notification.style.cssText = `
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        background: var(--primary);
+                        color: white;
+                        padding: 10px 20px;
+                        border-radius: 4px;
+                        z-index: 1000;
+                        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                        animation: fadeIn 0.3s ease-out;
+                    `;
+                    document.body.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        notification.style.opacity = '0';
+                        setTimeout(() => document.body.removeChild(notification), 300);
+                    }, 3000);
+                }, 300);
+            }
+        }
+
+        function editTierLabel(idx) {
+            const newLabel = prompt('Podaj nową nazwę tieru:', tiers[idx].label);
+            if (newLabel && newLabel.trim().length > 0) {
+                tiers[idx].label = newLabel.trim();
+                renderTiers();
+            }
+        }
+
+        function removeFromTier(tierIdx, itemIdx) {
+            if (showConfirmation('Usunąć ten element z tieru?')) {
+                tray.push(tiers[tierIdx].items[itemIdx]);
+                tiers[tierIdx].items.splice(itemIdx, 1);
+                renderTiers();
+                renderTray();
+            }
+        }
+
+        // --- DRAG & DROP ---
+        function onDragStart(e, tierIdx, imgIdx) {
+            dragData = { tierIdx, imgIdx };
+            e.dataTransfer.setData('text/plain', ''); // Required for Firefox
+            e.target.classList.add('dragging');
+        }
+
+        function onDrop(e, targetTierIdx) {
+            if (!dragData) return;
+            
+            e.preventDefault();
+            let item;
+            
+            if (dragData.tierIdx !== undefined) {
+                // Przenoszenie między tierami
+                const { tierIdx, imgIdx } = dragData;
+                item = tiers[tierIdx].items[imgIdx];
+                tiers[tierIdx].items.splice(imgIdx, 1);
+            } else if (dragData.trayIdx !== undefined) {
+                // Przenoszenie z przybornika
+                item = tray[dragData.trayIdx];
+                tray.splice(dragData.trayIdx, 1);
+            }
+            
+            if (item) {
+                tiers[targetTierIdx].items.push(item);
+            }
+            
+            dragData = null;
+            renderTiers();
+            renderTray();
+        }
+
+        // --- PEXELS API ---
+        async function searchPexels() {
+            const query = document.getElementById('pexels-query').value.trim();
+            if (!query) {
+                alert('Wpisz zapytanie wyszukiwania!');
+                return;
+            }
+            
+            const resultsDiv = document.getElementById('pexels-results');
+            resultsDiv.innerHTML = '<div class="empty-state"><i class="material-icons">search</i><p>Szukam zdjęć...</p></div>';
+            
+            try {
+                const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=15`, {
+                    headers: { Authorization: PEXELS_API_KEY }
+                });
+                
+                if (!res.ok) throw new Error('Błąd API');
+                
+                const data = await res.json();
+                resultsDiv.innerHTML = '';
+                
+                if (!data.photos || data.photos.length === 0) {
+                    resultsDiv.innerHTML = '<div class="empty-state"><i class="material-icons">error_outline</i><p>Brak wyników wyszukiwania</p></div>';
+                    return;
+                }
+                
+                data.photos.forEach(photo => {
+                    const img = document.createElement('img');
+                    img.src = photo.src.medium;
+                    img.className = 'pexels-img';
+                    img.alt = `Zdjęcie: ${query}`;
+                    img.title = 'Kliknij, aby dodać do przybornika';
+                    img.onclick = () => addToTray(img.src, photo.photographer);
+                    resultsDiv.appendChild(img);
+                });
+            } catch (e) {
+                resultsDiv.innerHTML = '<div class="empty-state"><i class="material-icons">error</i><p>Błąd pobierania zdjęć</p></div>';
+                console.error('Błąd Pexels API:', e);
+            }
+        }
+
+        function addToTray(imgSrc, photographer = '') {
+            const caption = photographer ? `Foto: ${photographer}` : '';
+            tray.push({ img: imgSrc, caption });
+            renderTray();
+            saveTierList(true);
+            
+            // Pokazujemy potwierdzenie
+            const notification = document.createElement('div');
+            notification.textContent = 'Zdjęcie dodane do przybornika!';
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--primary);
+                color: white;
+                padding: 10px 20px;
+                border-radius: 4px;
+                z-index: 1000;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 2000);
+        }
+
+        // --- TRYB PREZENTACJI ---
+        function enterPresentationMode() {
+            if (presentationActive) return;
+            presentationActive = true;
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'presentation-mode';
+            overlay.id = 'presentationOverlay';
+            
+            // Dodaj przyciski kontrolne
+            const controls = document.createElement('div');
+            controls.style.cssText = `
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                display: flex;
+                gap: 8px;
+                z-index: 1001;
+                padding: 5px;
+                background: rgba(var(--surface-rgb, 255, 255, 255), 0.8);
+                backdrop-filter: blur(8px);
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow);
+            `;
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'btn btn-primary';
+            closeBtn.innerHTML = '<i class="material-icons">close</i> Zamknij';
+            closeBtn.onclick = exitPresentationMode;
+            
+            const fullscreenBtn = document.createElement('button');
+            fullscreenBtn.className = 'btn';
+            fullscreenBtn.innerHTML = '<i class="material-icons">fullscreen</i>';
+            fullscreenBtn.onclick = () => {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                    fullscreenBtn.innerHTML = '<i class="material-icons">fullscreen_exit</i>';
+                } else {
+                    document.exitFullscreen();
+                    fullscreenBtn.innerHTML = '<i class="material-icons">fullscreen</i>';
+                }
+            };
+            
+            controls.appendChild(fullscreenBtn);
+            controls.appendChild(closeBtn);
+            overlay.appendChild(controls);
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                max-width: min(1200px, 90vw);
+                margin: 0 auto;
+                padding-top: clamp(60px, 10vh, 100px);
+            `;
+            
+            // Zliczanie elementów przed renderowaniem
+            const totalItems = tiers.reduce((sum, tier) => sum + tier.items.length, 0);
+            let currentItem = 0;
+            
+            tiers.forEach(tier => {
+                if (tier.items.length === 0) return;
+                
+                const tierDiv = document.createElement('div');
+                tierDiv.className = 'presentation-tier';
+                
+                const label = document.createElement('div');
+                label.className = 'presentation-label';
+                label.innerHTML = `${tier.label} <span style="font-size: 0.7em; opacity: 0.8;">(${tier.items.length} ${tier.items.length === 1 ? 'element' : 'elementów'})</span>`;
+                label.style.color = tier.color;
+                label.style.borderBottomColor = tier.color;
+                tierDiv.appendChild(label);
+                
+                const itemsDiv = document.createElement('div');
+                itemsDiv.className = 'presentation-items';
+                
+                tier.items.forEach(item => {
+                    currentItem++;
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'fade-in';
+                    wrapper.style.cssText = `
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        animation-delay: ${currentItem * 0.1}s;
+                    `;
+                    
+                    const img = document.createElement('img');
+                    img.src = item.img;
+                    img.className = 'presentation-img';
+                    img.alt = item.caption || 'Obraz prezentacji';
+                    img.loading = 'lazy';
+                    
+                    // Dodaj interaktywność obrazu
+                    img.onclick = () => {
+                        const fullscreen = document.createElement('div');
+                        fullscreen.style.cssText = `
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background: rgba(0,0,0,0.9);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            z-index: 1002;
+                            cursor: pointer;
+                        `;
+                        
+                        const largeImg = document.createElement('img');
+                        largeImg.src = item.img;
+                        largeImg.style.cssText = `
+                            max-width: 90vw;
+                            max-height: 90vh;
+                            object-fit: contain;
+                            border-radius: var(--border-radius);
+                            box-shadow: var(--shadow);
+                        `;
+                        
+                        fullscreen.onclick = () => fullscreen.remove();
+                        fullscreen.appendChild(largeImg);
+                        document.body.appendChild(fullscreen);
+                    };
+                    
+                    wrapper.appendChild(img);
+                    
+                    if (item.caption) {
+                        const caption = document.createElement('div');
+                        caption.className = 'presentation-caption';
+                        caption.textContent = item.caption;
+                        wrapper.appendChild(caption);
+                    }
+                    
+                    itemsDiv.appendChild(wrapper);
+                });
+                
+                tierDiv.appendChild(itemsDiv);
+                content.appendChild(tierDiv);
+            });
+            
+            overlay.appendChild(content);
+            document.body.appendChild(overlay);
+            
+            // Dodaj obsługę klawiatury
+            document.addEventListener('keydown', handlePresentationKeydown);
+            
+            // Automatycznie włącz tryb pełnoekranowy
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+                fullscreenBtn.innerHTML = '<i class="material-icons">fullscreen_exit</i>';
+            }
+        }
+        
+        function handlePresentationKeydown(e) {
+            if (!presentationActive) return;
+            
+            if (e.key === 'Escape') {
+                exitPresentationMode();
+            }
+        }
+
+        function exitPresentationMode() {
+            if (!presentationActive) return;
+            
+            presentationActive = false;
+            
+            // Usuń nasłuchiwanie klawiatury
+            document.removeEventListener('keydown', handlePresentationKeydown);
+            
+            // Płynnie ukryj overlay przed usunięciem
+            const overlay = document.getElementById('presentationOverlay');
+            if (overlay) {
+                overlay.style.transition = 'opacity 0.3s ease';
+                overlay.style.opacity = '0';
+                
+                setTimeout(() => {
+                    overlay.remove();
+                    
+                    // Wyjdź z trybu pełnoekranowego jeśli jest aktywny
+                    if (document.fullscreenElement) {
+                        document.exitFullscreen()
+                            .catch(err => console.log('Błąd podczas wyjścia z trybu pełnoekranowego:', err));
+                    }
+                }, 300);
+            }
+        }
+
+        // --- CIEMNY MOTYW ---
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.getElementById('darkModeBtn');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('tierlist_dark', '1');
+                btn.innerHTML = '<i class="material-icons">light_mode</i> Tryb jasny';
+            } else {
+                localStorage.removeItem('tierlist_dark');
+                btn.innerHTML = '<i class="material-icons">dark_mode</i> Tryb ciemny';
+            }
+        }
+
+        // --- ZAPISYWANIE I WCZYTYWANIE ---
+        function saveTierList(silent = false) {
+            const data = {
+                tiers: tiers,
+                tray: tray,
+                darkMode: document.body.classList.contains('dark-mode'),
+                traySide: traySide
+            };
+            
+            localStorage.setItem('tierlist_data', JSON.stringify(data));
+            
+            if (!silent) {
+                const notification = document.createElement('div');
+                notification.textContent = 'Tier lista została zapisana!';
+                notification.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    background: var(--primary);
+                    color: white;
+                    padding: 10px 20px;
+                    border-radius: 4px;
+                    z-index: 1000;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 2000);
+            }
+        }
+
+        function loadTierList() {
+            const data = localStorage.getItem('tierlist_data');
+            
+            if (!data) {
+                alert('Brak zapisanej tier listy.');
+                return;
+            }
+            
+            try {
+                const obj = JSON.parse(data);
+                
+                if (obj.tiers) tiers = obj.tiers;
+                if (obj.tray) tray = obj.tray;
+                if (obj.darkMode) document.body.classList.add('dark-mode');
+                if (obj.traySide !== undefined) traySide = obj.traySide;
+                
+                renderTiers();
+                renderTray();
+                updateTrayPosition();
+                
+                if (document.body.classList.contains('dark-mode')) {
+                    document.getElementById('darkModeBtn').innerHTML = '<i class="material-icons">light_mode</i> Tryb jasny';
+                }
+                
+                const notification = document.createElement('div');
+                notification.textContent = 'Tier lista została wczytana!';
+                notification.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    background: var(--primary);
+                    color: white;
+                    padding: 10px 20px;
+                    border-radius: 4px;
+                    z-index: 1000;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 2000);
+            } catch (e) {
+                alert('Błąd podczas wczytywania tier listy: ' + e.message);
+            }
+        }
+
+        function toggleTrayPosition() {
+            traySide = !traySide;
+            updateTrayPosition();
+            saveTierList(true);
+        }
+
+        // --- DODAWANIE ELEMENTÓW ---
+        function handleLocalImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Sprawdź czy plik jest obrazem
+            if (!file.type.startsWith('image/')) {
+                alert('Proszę wybrać plik obrazu (jpg, png, gif, itp.)');
+                return;
+            }
+
+            // Sprawdź rozmiar pliku (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Plik jest zbyt duży. Maksymalny rozmiar to 5MB.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Stwórz tymczasowy obraz aby pobrać wymiary
+                const img = new Image();
+                img.onload = function() {
+                    // Ogranicz wymiary jeśli są zbyt duże
+                    const maxDim = 800;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > maxDim || height > maxDim) {
+                        if (width > height) {
+                            height = Math.round(height * (maxDim / width));
+                            width = maxDim;
+                        } else {
+                            width = Math.round(width * (maxDim / height));
+                            height = maxDim;
+                        }
+                    }
+
+                    // Stwórz canvas do zmniejszenia obrazu
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Dodaj do przybornika
+                    addToTray(canvas.toDataURL('image/jpeg', 0.85), file.name);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            // Wyczyść input aby można było wybrać ten sam plik ponownie
+            event.target.value = '';
+        }
+
+        function addTextItem() {
+            const text = prompt('Wpisz tekst do dodania:');
+            if (!text) return;
+
+            // Stwórz canvas z tekstem
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Ustaw wymiary i style
+            canvas.width = 200;
+            canvas.height = 200;
+            
+            // Tło
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--surface');
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Tekst
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--on-surface');
+            ctx.font = 'bold 24px Montserrat';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // Podziel tekst na linie
+            const words = text.split(' ');
+            let lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                const testLine = currentLine + ' ' + words[i];
+                const metrics = ctx.measureText(testLine);
+                
+                if (metrics.width < canvas.width - 20) {
+                    currentLine = testLine;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+
+            // Narysuj tekst
+            const lineHeight = 30;
+            const totalHeight = lines.length * lineHeight;
+            const startY = (canvas.height - totalHeight) / 2;
+
+            lines.forEach((line, i) => {
+                ctx.fillText(line, canvas.width/2, startY + (i * lineHeight) + lineHeight/2);
+            });
+
+            // Dodaj do przybornika
+            addToTray(canvas.toDataURL('image/png'), text);
+        }
+
+        // --- INICJALIZACJA ---
+        function initialLoad() {
+            const data = localStorage.getItem('tierlist_data');
+            
+            if (data) {
+                try {
+                    const obj = JSON.parse(data);
+                    if (obj.tiers) tiers = obj.tiers;
+                    if (obj.tray) tray = obj.tray;
+                    if (obj.darkMode) document.body.classList.add('dark-mode');
+                    if (obj.traySide !== undefined) traySide = obj.traySide;
+                } catch (e) {
+                    console.error('Błąd wczytywania danych:', e);
+                }
+            }
+            
+            renderTiers();
+            renderTray();
+            updateTrayPosition();
+            
+            if (document.body.classList.contains('dark-mode')) {
+                document.getElementById('darkModeBtn').innerHTML = '<i class="material-icons">light_mode</i> Tryb jasny';
+            }
+
+            // Ustaw początkowy stan przycisku potwierdzeń
+            if (!confirmationsEnabled) {
+                document.getElementById('confirmationsBtn').innerHTML = '<i class="material-icons">notifications</i> Potwierdzenia wył.';
+            }
+            
+            // Obsługa Enter w wyszukiwarce
+            document.getElementById('pexels-query').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchPexels();
+                }
+            });
+        }
+
+        // Start aplikacji
+        document.addEventListener('DOMContentLoaded', initialLoad);
+    </script>
+</body>
+</html>
