@@ -257,13 +257,20 @@
         }
 
         .pexels-results {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 1rem;
             margin-top: 1rem;
             max-height: 400px;
             overflow-y: auto;
             padding: 5px;
+        }
+
+        .pexels-results.grid-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .pexels-results:not(.grid-view) .empty-state {
+            min-height: 200px;
         }
 
         .pexels-img {
@@ -832,7 +839,7 @@
                         <div class="pexels-results" id="pexels-results">
                             <div class="empty-state">
                                 <i class="material-icons">search</i>
-                                <p>Wpisz zapytanie, aby wyszukać zdjęcia</p>
+                                <p>Wpisz zapytanie i kliknij szukaj lub wciśnij Enter</p>
                             </div>
                         </div>
                     </div>
@@ -1279,6 +1286,13 @@
                 const data = await res.json();
                 resultsDiv.innerHTML = '';
                 
+                // Dodaj klasę grid-view jeśli są wyniki
+                if (data.photos && data.photos.length > 0) {
+                    resultsDiv.classList.add('grid-view');
+                } else {
+                    resultsDiv.classList.remove('grid-view');
+                }
+                
                 if (!data.photos || data.photos.length === 0) {
                     resultsDiv.innerHTML = '<div class="empty-state"><i class="material-icons">error_outline</i><p>Brak wyników wyszukiwania</p></div>';
                     return;
@@ -1294,13 +1308,14 @@
                     resultsDiv.appendChild(img);
                 });
             } catch (e) {
+                resultsDiv.classList.remove('grid-view');
                 resultsDiv.innerHTML = '<div class="empty-state"><i class="material-icons">error</i><p>Błąd pobierania zdjęć</p></div>';
                 console.error('Błąd Pexels API:', e);
             }
         }
 
         function addToTray(imgSrc, photographer = '') {
-            const caption = photographer ? `Foto: ${photographer}` : '';
+            const caption = photographer ? `${photographer}` : '';
             tray.push({ img: imgSrc, caption });
             renderTray();
             saveTierList(true);
