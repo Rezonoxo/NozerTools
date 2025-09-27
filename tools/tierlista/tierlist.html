@@ -474,15 +474,24 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            padding: clamp(1rem, 5%, 2rem);
             color: #9e9e9e;
             text-align: center;
+            min-height: 150px;
+            width: 100%;
+            height: 100%;
         }
 
         .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: clamp(0.5rem, 2vw, 1rem);
             opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            max-width: 200px;
+            margin: 0 auto;
         }
 
         .presentation-mode {
@@ -786,7 +795,7 @@
         <div class="header-content">
             <div class="logo">
                 <i class="material-icons">photo_library</i>
-                <div class="logo-text"><span class="logo-accent">PEXELS</span> TIER LISTA</div>
+                <div class="logo-text"><span class="logo-accent">NozerTools</span> Kreator Tier listy</div>
             </div>
             <div class="controls">
                 <button class="btn" onclick="toggleDarkMode()" id="darkModeBtn">
@@ -813,11 +822,11 @@
             <div class="sidebar">
                 <div class="panel">
                     <div class="panel-title">
-                        <i class="material-icons">search</i> Wyszukiwarka Pexels
+                        <i class="material-icons">search</i> Wyszukiwarka obrazów
                     </div>
                     <div class="search-section">
                         <div class="search-bar">
-                            <input id="pexels-query" type="text" class="search-input" placeholder="Wyszukaj zdjęcia (np. koty, samochody)...">
+                            <input id="pexels-query" type="text" class="search-input" placeholder="Wpisz co chcesz wyszukać...">
                             <button class="search-btn" onclick="searchPexels()">Szukaj</button>
                         </div>
                         <div class="pexels-results" id="pexels-results">
@@ -845,7 +854,7 @@
                     <div class="tray" id="tray">
                         <div class="empty-state">
                             <i class="material-icons">photo_library</i>
-                            <p>Przeciągnij zdjęcia tutaj lub wyszukaj nowe</p>
+                            <p>Dodaj zdjęcia z komputera lub wyszukaj w bazie Pexels</p>
                         </div>
                     </div>
                 </div>
