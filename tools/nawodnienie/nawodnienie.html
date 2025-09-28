@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HydroTrack - Śledzenie Nawodnienia</title>
+    <title>HydroTrack - Hydration Tracking</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -112,7 +113,7 @@
             to { opacity: 1; }
         }
 
-        /* Strona główna */
+        /* Dashboard */
         .dashboard {
             display: flex;
             flex-direction: column;
@@ -233,7 +234,7 @@
             border-bottom: none;
         }
 
-        /* Popup z ciekawostką */
+        /* Fact popup */
         .fact-popup {
             position: fixed;
             bottom: 20px;
@@ -587,188 +588,7 @@
             color: var(--primary);
         }
 
-        /* Auth section styles */
-        .auth-section {
-            display: none;
-            padding: 30px;
-            min-height: 500px;
-            text-align: center;
-        }
-
-        .auth-section.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .auth-container {
-            max-width: 400px;
-            margin: 0 auto;
-            background: var(--white);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 15px var(--shadow);
-        }
-
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 30px;
-            border-radius: 10px;
-            overflow: hidden;
-            background: var(--light);
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 15px;
-            background: var(--light);
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .auth-tab.active {
-            background: var(--primary);
-            color: var(--white);
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .auth-form h3 {
-            margin-bottom: 20px;
-            color: var(--dark);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--dark);
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--light);
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .auth-btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            background: var(--primary);
-            color: var(--white);
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 15px;
-        }
-
-        .auth-btn:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-        }
-
-        .auth-btn:disabled {
-            background: var(--gray);
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .auth-switch {
-            background: none;
-            border: none;
-            color: var(--primary);
-            cursor: pointer;
-            text-decoration: underline;
-            font-size: 14px;
-        }
-
-        .user-info {
-            display: none;
-            align-items: center;
-            gap: 10px;
-            color: var(--white);
-        }
-
-        .user-info.active {
-            display: flex;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: var(--white);
-        }
-
-        .logout-btn {
-            background: none;
-            border: none;
-            color: var(--white);
-            cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: background 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .error-message {
-            background: var(--danger);
-            color: var(--white);
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            display: none;
-        }
-
-        .error-message.active {
-            display: block;
-        }
-
-        .success-message {
-            background: var(--success);
-            color: var(--white);
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            display: none;
-        }
-
-        .success-message.active {
-            display: block;
-        }
-
-        /* Globalne komunikaty błędów */
+        /* Global error/success messages */
         .global-error {
             position: fixed;
             top: 20px;
@@ -816,7 +636,7 @@
             to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
 
-        /* Responsywność */
+        /* Responsiveness */
         @media (max-width: 768px) {
             .water-buttons {
                 grid-template-columns: 1fr;
@@ -847,88 +667,25 @@
                 <i class="fas fa-tint"></i>
                 <span>HydroTrack</span>
             </div>
-            <div class="user-info" id="user-info">
-                <div class="user-avatar" id="user-avatar">U</div>
-                <span id="user-name">Użytkownik</span>
-                <button class="logout-btn" id="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </div>
         </header>
         
         <nav>
-            <div class="nav-item" data-target="dashboard">
-                <i class="fas fa-home"></i> Strona Główna
+            <div class="nav-item active" data-target="dashboard">
+                <i class="fas fa-home"></i> Dashboard
             </div>
             <div class="nav-item" data-target="notifications">
-                <i class="fas fa-bell"></i> Powiadomienia
+                <i class="fas fa-bell"></i> Reminders
             </div>
             <div class="nav-item" data-target="statistics">
-                <i class="fas fa-chart-bar"></i> Statystyki
+                <i class="fas fa-chart-bar"></i> Statistics
             </div>
             <div class="nav-item" data-target="help">
-                <i class="fas fa-question-circle"></i> Pomoc
+                <i class="fas fa-question-circle"></i> Help
             </div>
         </nav>
         
-        <!-- Sekcja logowania -->
-        <section id="auth" class="auth-section active">
-            <div class="auth-container">
-                <div class="auth-tabs">
-                    <button class="auth-tab active" data-form="login">Logowanie</button>
-                    <button class="auth-tab" data-form="register">Rejestracja</button>
-                </div>
-                
-                <div class="error-message" id="auth-error"></div>
-                <div class="success-message" id="auth-success"></div>
-                
-                <!-- Formularz logowania -->
-                <form class="auth-form active" id="login-form">
-                    <h3>Zaloguj się</h3>
-                    <div class="form-group">
-                        <label for="login-email">Email</label>
-                        <input type="email" id="login-email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="login-password">Hasło</label>
-                        <input type="password" id="login-password" required>
-                    </div>
-                    <button type="submit" class="auth-btn" id="login-btn">
-                        <i class="fas fa-sign-in-alt"></i> Zaloguj się
-                    </button>
-                    <button type="button" class="auth-btn" id="continue-offline" style="background: var(--accent);">
-                        <i class="fas fa-user-clock"></i> Kontynuuj bez logowania
-                    </button>
-                </form>
-                
-                <!-- Formularz rejestracji -->
-                <form class="auth-form" id="register-form">
-                    <h3>Utwórz konto</h3>
-                    <div class="form-group">
-                        <label for="register-name">Imię</label>
-                        <input type="text" id="register-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-email">Email</label>
-                        <input type="email" id="register-email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-password">Hasło</label>
-                        <input type="password" id="register-password" required minlength="6">
-                    </div>
-                    <div class="form-group">
-                        <label for="register-confirm">Potwierdź hasło</label>
-                        <input type="password" id="register-confirm" required>
-                    </div>
-                    <button type="submit" class="auth-btn" id="register-btn">
-                        <i class="fas fa-user-plus"></i> Utwórz konto
-                    </button>
-                </form>
-            </div>
-        </section>
-        
-        <!-- Sekcja główna -->
-        <section id="dashboard" class="section">
+        <!-- Dashboard section -->
+        <section id="dashboard" class="section active">
             <div class="dashboard">
                 <div class="progress-container">
                     <div class="progress-circle" id="progress-circle"></div>
@@ -953,442 +710,350 @@
                     </button>
                     <button class="water-btn custom" id="custom-water">
                         <i class="fas fa-pen"></i>
-                        Niestandardowa ilość
+                        Custom Amount
                     </button>
                 </div>
                 
                 <div class="hydration-log">
-                    <h3 class="log-title"><i class="fas fa-history"></i> Ostatnie nawodnienia</h3>
+                    <h3 class="log-title"><i class="fas fa-history"></i> Recent Hydrations</h3>
                     <div class="log-list" id="hydration-log">
-                        <!-- Tutaj będą dodawane wpisy -->
+                        <!-- Entries will be added here -->
                     </div>
                 </div>
             </div>
         </section>
         
-        <!-- Sekcja powiadomień -->
+        <!-- Notifications section -->
         <section id="notifications" class="section">
-            <h2 class="form-title"><i class="fas fa-bell"></i> Ustawienia powiadomień</h2>
+            <h2 class="form-title"><i class="fas fa-bell"></i> Reminder Settings</h2>
             
             <div class="reminder-form">
-                <h3 class="form-title">Dodaj przypomnienie</h3>
+                <h3 class="form-title">Add a Reminder</h3>
                 <div class="form-group">
-                    <label for="reminder-type">Typ przypomnienia</label>
+                    <label for="reminder-type">Reminder Type</label>
                     <select id="reminder-type">
-                        <option value="interval">Co określony czas</option>
-                        <option value="specific">O konkretnej godzinie</option>
+                        <option value="interval">At regular intervals</option>
+                        <option value="specific">At specific time</option>
                     </select>
                 </div>
                 
                 <div class="form-group" id="interval-group">
-                    <label for="reminder-interval">Interwał (minuty)</label>
+                    <label for="reminder-interval">Interval (minutes)</label>
                     <input type="number" id="reminder-interval" min="5" value="30">
                 </div>
                 
                 <div class="form-group" id="time-group" style="display: none;">
-                    <label for="reminder-time">Godzina</label>
+                    <label for="reminder-time">Time</label>
                     <input type="time" id="reminder-time">
                 </div>
                 
-                <button class="btn" id="add-reminder">Dodaj przypomnienie</button>
-                <button class="btn" id="test-notification" style="background: var(--accent); margin-top: 10px;">Testuj powiadomienie</button>
+                <button class="btn" id="add-reminder">Add Reminder</button>
+                <button class="btn" id="test-notification" style="background: var(--accent); margin-top: 10px;">Test Notification</button>
             </div>
             
             <div class="reminder-list">
-                <h3 class="form-title">Aktywne przypomnienia</h3>
+                <h3 class="form-title">Active Reminders</h3>
                 <div id="reminders-list">
-                    <!-- Tutaj będą dodawane przypomnienia -->
+                    <!-- Reminders will be added here -->
                 </div>
             </div>
         </section>
         
-        <!-- Sekcja statystyk -->
+        <!-- Statistics section -->
         <section id="statistics" class="section">
-            <h2 class="form-title"><i class="fas fa-chart-bar"></i> Statystyki nawodnienia</h2>
+            <h2 class="form-title"><i class="fas fa-chart-bar"></i> Hydration Statistics</h2>
             
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-label">Dzisiejsze nawodnienie</div>
+                    <div class="stat-label">Today's Hydration</div>
                     <div class="stat-value" id="stat-today">0 ml</div>
-                    <div class="stat-label" id="stat-today-percent">0% celu</div>
+                    <div class="stat-label" id="stat-today-percent">0% of goal</div>
                 </div>
                 
                 <div class="stat-card">
-                    <div class="stat-label">Średnia dzienna</div>
+                    <div class="stat-label">Daily Average</div>
                     <div class="stat-value" id="stat-average">0 ml</div>
-                    <div class="stat-label">z ostatnich 7 dni</div>
+                    <div class="stat-label">from last 7 days</div>
                 </div>
                 
                 <div class="stat-card">
-                    <div class="stat-label">Dni z osiągniętym celem</div>
+                    <div class="stat-label">Goal Achieved Days</div>
                     <div class="stat-value" id="stat-goal-days">0</div>
-                    <div class="stat-label">w tym miesiącu</div>
+                    <div class="stat-label">this month</div>
                 </div>
                 
                 <div class="stat-card">
-                    <div class="stat-label">Aktualna passa</div>
-                    <div class="stat-value" id="stat-streak">0 dni</div>
-                    <div class="stat-label">dni z rzędu z celem</div>
+                    <div class="stat-label">Current Streak</div>
+                    <div class="stat-value" id="stat-streak">0 days</div>
+                    <div class="stat-label">consecutive days with goal</div>
                 </div>
             </div>
             
             <div class="chart-container">
-                <h3 class="form-title">Nawodnienie w tym tygodniu</h3>
+                <h3 class="form-title">Hydration This Week</h3>
                 <canvas id="weekly-chart"></canvas>
             </div>
         </section>
         
-        <!-- Sekcja pomocy -->
+        <!-- Help section -->
         <section id="help" class="section">
-            <h2 class="form-title"><i class="fas fa-question-circle"></i> Centrum pomocy</h2>
+            <h2 class="form-title"><i class="fas fa-question-circle"></i> Help Center</h2>
             
             <div class="faq-list">
-                <h3 class="form-title">Często zadawane pytania</h3>
+                <h3 class="form-title">Frequently Asked Questions</h3>
                 
                 <div class="faq-item">
                     <div class="faq-question">
-                        Jak ustawić dzienny cel nawodnienia?
+                        How to set a daily hydration goal?
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        Aby ustawić dzienny cel, przejdź do sekcji głównej i kliknij na wartość celu. Możesz ustawić cel ręcznie lub obliczyć go na podstawie swojej wagi i poziomu aktywności.
+                        To set a daily goal, go to the dashboard section and click on the goal value. You can set the goal manually or calculate it based on your weight and activity level.
                     </div>
                 </div>
                 
                 <div class="faq-item">
                     <div class="faq-question">
-                        Jak dodać niestandardową ilość wody?
+                        How to add a custom amount of water?
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        Kliknij przycisk "Niestandardowa ilość" na stronie głównej, a następnie wprowadż żądaną ilość wody w mililitrach.
+                        Click the "Custom Amount" button on the dashboard, then enter the desired amount of water in milliliters.
                     </div>
                 </div>
                 
                 <div class="faq-item">
                     <div class="faq-question">
-                        Jak działają powiadomienia?
+                        How do reminders work?
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        W sekcji Powiadomienia możesz ustawić przypomnienia o piciu wody. Możesz wybrać powiadomienia co określony czas (np. co 30 minut) lub o konkretnej godzinie.
+                        In the Reminders section, you can set up drinking water reminders. You can choose notifications at regular intervals (e.g. every 30 minutes) or at specific times.
                     </div>
                 </div>
                 
                 <div class="faq-item">
                     <div class="faq-question">
-                        Co oznacza komunikat "Dane będą zapisywane lokalnie"?
+                        What does "Data will be saved locally" mean?
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        Jeśli widzisz ten komunikat, oznacza to, że aplikacja nie może połączyć się z bazą danych online. Twoje dane są bezpiecznie zapisywane w przeglądarce i będą dostępne przy następnym otwarciu aplikacji. Możesz nadal korzystać ze wszystkich funkcji aplikacji.
+                        This means your data is safely stored in your browser and will be available the next time you open the application. You can still use all the application features.
                     </div>
                 </div>
                 
                 <div class="faq-item">
                     <div class="faq-question">
-                        Jak działa tryb offline?
+                        How does offline mode work?
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        W trybie offline wszystkie Twoje dane są zapisywane lokalnie w przeglądarce. Możesz korzystać z wszystkich funkcji aplikacji, w tym dodawania wody, ustawiania przypomnień i przeglądania statystyk. Dane będą dostępne nawet bez połączenia internetowego.
+                        In offline mode, all your data is stored locally in your browser. You can use all application features, including adding water, setting reminders, and viewing statistics. Data will be available even without an internet connection.
                     </div>
                 </div>
             </div>
             
             <div class="contact-info">
-                <h3 class="form-title">Kontakt</h3>
-                <p>Masz pytania lub problemy? Skontaktuj się z nami:</p>
-                <p>Email: nozercode@proton.me</p>
-                <p>Discord: rezonoxo</p>
+                <h3 class="form-title">Contact</h3>
+                <p>Have questions or issues? Contact us:</p>
+                <p>Email: support@hydrotrack.com</p>
+                <p>Website: www.hydrotrack.com</p>
             </div>
         </section>
     </div>
     
-    <!-- Globalne komunikaty -->
+    <!-- Global messages -->
     <div class="global-error" id="global-error"></div>
     <div class="global-success" id="global-success"></div>
     
-    <!-- Modal ustawiania celu -->
+    <!-- Goal setting modal -->
     <div class="modal-overlay" id="goal-modal">
         <div class="modal">
             <div class="modal-header">
                 <div class="modal-title">
                     <i class="fas fa-bullseye"></i>
-                    Ustaw dzienny cel nawodnienia
+                    Set Daily Hydration Goal
                 </div>
                 <button class="modal-close" id="close-goal-modal">&times;</button>
             </div>
             
             <div class="goal-tabs">
-                <button class="goal-tab active" data-form="manual">Ręcznie</button>
-                <button class="goal-tab" data-form="calculate">Oblicz</button>
+                <button class="goal-tab active" data-form="manual">Manual</button>
+                <button class="goal-tab" data-form="calculate">Calculate</button>
             </div>
             
-            <!-- Formularz ręcznego ustawiania -->
+            <!-- Manual goal setting form -->
             <div class="goal-form active" id="manual-form">
-                <h4>Ustaw cel ręcznie</h4>
+                <h4>Set Goal Manually</h4>
                 <div class="form-group">
-                    <label for="manual-goal">Dzienny cel (ml)</label>
+                    <label for="manual-goal">Daily Goal (ml)</label>
                     <input type="number" id="manual-goal" min="500" max="5000" value="2000">
                 </div>
-                <button class="btn" id="set-manual-goal">Ustaw cel</button>
+                <button class="btn" id="set-manual-goal">Set Goal</button>
             </div>
             
-            <!-- Formularz obliczania -->
+            <!-- Calculation form -->
             <div class="goal-form" id="calculate-form">
-                <h4>Oblicz cel na podstawie Twoich danych</h4>
+                <h4>Calculate Goal Based on Your Data</h4>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="weight">Waga (kg)</label>
+                        <label for="weight">Weight (kg)</label>
                         <input type="number" id="weight" min="30" max="200" placeholder="70">
                     </div>
                     <div class="form-group">
-                        <label for="age">Wiek</label>
+                        <label for="age">Age</label>
                         <input type="number" id="age" min="1" max="120" placeholder="25">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="activity-level">Poziom aktywności</label>
+                    <label for="activity-level">Activity Level</label>
                     <select id="activity-level">
-                        <option value="low">Niska (siedzący tryb życia)</option>
-                        <option value="moderate" selected>Umiarkowana (lekka aktywność)</option>
-                        <option value="high">Wysoka (intensywne treningi)</option>
-                        <option value="very-high">Bardzo wysoka (zawodowy sportowiec)</option>
+                        <option value="low">Low (sedentary lifestyle)</option>
+                        <option value="moderate" selected>Moderate (light activity)</option>
+                        <option value="high">High (intense workouts)</option>
+                        <option value="very-high">Very high (professional athlete)</option>
                     </select>
                 </div>
                 <button class="calculate-btn" id="calculate-goal">
-                    <i class="fas fa-calculator"></i> Oblicz cel
+                    <i class="fas fa-calculator"></i> Calculate Goal
                 </button>
                 <div class="result-display" id="calculation-result" style="display: none;">
                     <div id="calculated-amount">0 ml</div>
                     <div style="font-size: 14px; color: var(--gray); margin-top: 5px;">
-                        Zalecana ilość wody dziennie
+                        Recommended daily water amount
                     </div>
                 </div>
-                <button class="btn" id="set-calculated-goal" style="display: none;">Ustaw obliczony cel</button>
+                <button class="btn" id="set-calculated-goal" style="display: none;">Set Calculated Goal</button>
             </div>
         </div>
     </div>
     
-    <!-- Popup z ciekawostką -->
+    <!-- Fact popup -->
     <div class="fact-popup" id="fact-popup">
         <div class="fact-header">
             <div class="fact-title">
                 <i class="fas fa-lightbulb"></i>
-                Czy wiesz, że?
+                Did You Know?
             </div>
             <button class="close-btn" id="close-fact">&times;</button>
         </div>
         <div class="fact-content" id="fact-content">
-            Woda stanowi około 60% masy ciała dorosłego człowieka i jest niezbędna do prawidłowego funkcjonowania organizmu.
+            Water makes up about 60% of an adult's body weight and is essential for the proper functioning of the body.
         </div>
     </div>
 
     <script>
-        // Konfiguracja Supabase
-        const SUPABASE_URL = 'https://lqbgtinggnknyumewgda.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxxYmd0aW5nZ25rbnl1bWV3Z2RhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc1MDAwNTgsImV4cCI6MjA3MzA3NjA1OH0.qq51yALnkgg58lgaRWsYKRjFBWiIEJE_XJxKBzoXe_0';
-        
-        // Zmienna dla Supabase (zostanie zainicjalizowana później)
-        let supabase = null;
-        
-        // Dane aplikacji
+        // App data
         let waterData = {
             current: 0,
             target: 2000,
             history: [],
             reminders: [],
             goalAchieved: 0,
-            streak: 0
+            streak: 0,
+            lastResetDate: new Date().toDateString()
         };
         
-        // Stan uwierzytelniania
-        let currentUser = null;
-        let isAuthenticated = false;
-        
-        // Funkcja inicjalizacji Supabase
-        function initSupabase() {
-            try {
-                if (window.supabase) {
-                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    console.log('Supabase zainicjalizowany pomyślnie');
-                    
-                    // Sprawdź czy tabela istnieje (opcjonalnie)
-                    checkSupabaseTable();
-                    
-                    return true;
-                } else {
-                    console.error('Supabase SDK nie jest dostępny');
-                    // Pokaż komunikat użytkownikowi
-                    showGlobalError('Nie można załadować Supabase. Aplikacja będzie działać w trybie offline.', 10000);
-                    return false;
-                }
-            } catch (error) {
-                console.error('Błąd inicjalizacji Supabase:', error);
-                showGlobalError('Błąd inicjalizacji Supabase. Sprawdź połączenie internetowe.', 10000);
-                return false;
-            }
-        }
-        
-        // Funkcja sprawdzająca czy tabela istnieje w Supabase
-        async function checkSupabaseTable() {
-            if (!supabase) return;
-            
-            try {
-                // Spróbuj wykonać prosty zapytanie do tabeli
-                const { error } = await supabase
-                    .from('water_intake')
-                    .select('count')
-                    .limit(1);
-                
-                if (error) {
-                    console.warn('Tabela water_intake nie istnieje lub nie ma uprawnień:', error);
-                    showGlobalError('Tabela danych nie jest skonfigurowana. Dane będą zapisywane lokalnie.', 8000);
-                } else {
-                    console.log('Tabela water_intake jest dostępna');
-                }
-            } catch (error) {
-                console.warn('Nie można sprawdzić tabeli water_intake:', error);
-            }
-        }
-        
-        // Ciekawostki o wodzie
+        // Water facts
         const waterFacts = [
-            "Woda stanowi około 60% masy ciała dorosłego człowieka i jest niezbędna do prawidłowego funkcjonowania organizmu.",
-            "Nawet lekkie odwodnienie może wpływać na nastrój, koncentrację i wydolność fizyczną.",
-            "Dorosły człowiek traci codziennie około 2-3 litrów wody przez oddychanie, pocenie się i inne funkcje organizmu.",
-            "Picie wody może przyspieszyć metabolizm nawet o 30% w ciągu 30-40 minut.",
-            "Optymalne nawodnienie poprawia elastyczność skóry i opóźnia pojawianie się zmarszczek.",
-            "Woda pomaga usuwać toksyny z organizmu i wspiera funkcjonowanie nerek.",
-            "Odwodnienie może powodować bóle głowy i migreny.",
-            "Picie wody przed posiłkiem może pomóc w utracie wagi, zmniejszając apetyt."
+            "Water makes up about 60% of an adult's body weight and is essential for the proper functioning of the body.",
+            "Even mild dehydration can affect mood, concentration, and physical performance.",
+            "An adult loses about 2-3 liters of water daily through breathing, sweating, and other bodily functions.",
+            "Drinking water can boost metabolism by up to 30% within 30-40 minutes.",
+            "Optimal hydration improves skin elasticity and delays the appearance of wrinkles.",
+            "Water helps remove toxins from the body and supports kidney function.",
+            "Dehydration can cause headaches and migraines.",
+            "Drinking water before meals can help with weight loss by reducing appetite."
         ];
         
-        // Inicjalizacja po załadowaniu DOM
+        // Initialize after DOM loads
         document.addEventListener('DOMContentLoaded', function() {
-            // Inicjalizuj Supabase (nie przerywaj działania aplikacji jeśli się nie uda)
-            initSupabase();
+            // Check if we need to reset the daily counter
+            checkAndResetDailyCounter();
             
-            // Sprawdź status uwierzytelniania
-            checkAuthStatus();
+            // Load data from localStorage
+            loadData();
             
-            // Nawigacja
+            // Navigation
             setupNavigation();
             
-            // Obsługa przycisków wody
+            // Water buttons
             setupWaterButtons();
             
-            // Obsługa przypomnień
+            // Reminders
             setupReminders();
             
-            // Inicjalizacja wykresu
+            // Initialize chart
             initChart();
             
-            // Pokazanie losowej ciekawostki
+            // Show random fact
             showRandomFact();
             
-            // Obsługa uwierzytelniania
-            setupAuth();
-            
-            // Obsługa FAQ
+            // FAQ
             setupFAQ();
             
-            // Obsługa modala ustawiania celu
+            // Goal modal
             setupGoalModal();
+            
+            // Update UI
+            updateUI();
         });
         
-        // Funkcja do ładowania danych
-        async function loadData() {
-            if (isAuthenticated && currentUser && supabase) {
-                try {
-                    // Pobierz dane z Supabase
-                    const { data, error } = await supabase
-                        .from('water_intake')
-                        .select('*')
-                        .eq('user_id', currentUser.id)
-                        .order('created_at', { ascending: false });
+        // Function to check and reset daily counter if needed
+        function checkAndResetDailyCounter() {
+            const today = new Date().toDateString();
+            const savedData = localStorage.getItem('hydrotrack_data');
+            
+            if (savedData) {
+                const parsedData = JSON.parse(savedData);
+                
+                // If the last reset date is different from today, reset current water intake
+                if (parsedData.lastResetDate !== today) {
+                    parsedData.current = 0;
+                    parsedData.lastResetDate = today;
                     
-                    if (!error && data && data.length > 0) {
-                        // Jeśli dane są w Supabase, użyj ich
-                        const latestData = data[0];
-                        waterData.current = latestData.current || 0;
-                        waterData.target = latestData.target || 2000;
-                        waterData.history = latestData.history || [];
-                        waterData.reminders = latestData.reminders || [];
-                        waterData.goalAchieved = latestData.goal_achieved || 0;
-                        waterData.streak = latestData.streak || 0;
-                        
-                        updateUI();
-                        setupNotificationReminders();
+                    // Update streak if goal was achieved yesterday
+                    if (parsedData.current >= parsedData.target) {
+                        parsedData.streak++;
                     } else {
-                        // Jeśli nie ma danych w Supabase, spróbuj załadować z localStorage
-                        const savedData = localStorage.getItem('hydrotrack_data');
-                        if (savedData) {
-                            waterData = JSON.parse(savedData);
-                            updateUI();
-                            setupNotificationReminders();
-                        }
+                        parsedData.streak = 0;
                     }
-                } catch (error) {
-                    console.warn('Błąd ładowania z Supabase, ładuję z localStorage:', error);
-                    // Fallback do localStorage
-                    const savedData = localStorage.getItem('hydrotrack_data');
-                    if (savedData) {
-                        waterData = JSON.parse(savedData);
-                        updateUI();
-                        setupNotificationReminders();
-                    }
-                }
-            } else {
-                // Spróbuj załadować z localStorage
-                const savedData = localStorage.getItem('hydrotrack_data');
-                if (savedData) {
-                    waterData = JSON.parse(savedData);
-                    updateUI();
-                    setupNotificationReminders();
+                    
+                    // Save the updated data
+                    localStorage.setItem('hydrotrack_data', JSON.stringify(parsedData));
+                    
+                    // Show notification about reset
+                    showGlobalSuccess("Daily counter has been reset. Let's hydrate today!", 5000);
                 }
             }
         }
         
-        // Funkcja do zapisywania danych
-        async function saveData() {
-            if (isAuthenticated && currentUser && supabase) {
-                try {
-                    // Spróbuj zapisać do Supabase - jeśli się nie uda, zapisz lokalnie
-                    const { error } = await supabase
-                        .from('water_intake')
-                        .upsert({
-                            user_id: currentUser.id,
-                            current: waterData.current,
-                            target: waterData.target,
-                            history: waterData.history,
-                            reminders: waterData.reminders,
-                            goal_achieved: waterData.goalAchieved,
-                            streak: waterData.streak
-                        });
-                    
-                    if (error) {
-                        console.warn('Błąd zapisu do Supabase, zapisuję lokalnie:', error);
-                        // Zapisz do localStorage jako fallback
-                        localStorage.setItem('hydrotrack_data', JSON.stringify(waterData));
-                        localStorage.setItem('hydrotrack_user_id', currentUser.id);
-                    } else {
-                        console.log('Dane zapisane do Supabase');
-                    }
-                } catch (error) {
-                    console.warn('Błąd zapisu do Supabase, zapisuję lokalnie:', error);
-                    // Zapisz do localStorage jako fallback
-                    localStorage.setItem('hydrotrack_data', JSON.stringify(waterData));
-                    localStorage.setItem('hydrotrack_user_id', currentUser.id);
+        // Function to load data
+        function loadData() {
+            const savedData = localStorage.getItem('hydrotrack_data');
+            if (savedData) {
+                const parsedData = JSON.parse(savedData);
+                
+                // Check if we need to reset the counter
+                const today = new Date().toDateString();
+                if (parsedData.lastResetDate !== today) {
+                    parsedData.current = 0;
+                    parsedData.lastResetDate = today;
                 }
+                
+                waterData = parsedData;
             } else {
-                // Zapisz do localStorage
-                localStorage.setItem('hydrotrack_data', JSON.stringify(waterData));
+                // Initialize with default values
+                saveData();
             }
         }
         
-        // Funkcja do obsługi nawigacji
+        // Function to save data
+        function saveData() {
+            localStorage.setItem('hydrotrack_data', JSON.stringify(waterData));
+        }
+        
+        // Navigation function
         function setupNavigation() {
             const navItems = document.querySelectorAll('.nav-item');
             
@@ -1396,33 +1061,33 @@
                 item.addEventListener('click', function() {
                     const target = this.getAttribute('data-target');
                     
-                    // Usuń klasę active ze wszystkich elementów
+                    // Remove active class from all items
                     navItems.forEach(navItem => {
                         navItem.classList.remove('active');
                     });
                     
-                    // Dodaj klasę active do klikniętego elementu
+                    // Add active class to clicked item
                     this.classList.add('active');
                     
-                    // Ukryj wszystkie sekcje
+                    // Hide all sections
                     document.querySelectorAll('.section').forEach(section => {
                         section.classList.remove('active');
                     });
                     
-                    // Pokaż docelową sekcję
+                    // Show target section
                     document.getElementById(target).classList.add('active');
                 });
             });
         }
         
-        // Funkcja do obsługi przycisków wody
+        // Water buttons function
         function setupWaterButtons() {
             const waterButtons = document.querySelectorAll('.water-btn');
             
             waterButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     if (this.id === 'custom-water') {
-                        const amount = prompt('Podaj ilość wody w ml:');
+                        const amount = prompt('Enter water amount in ml:');
                         if (amount && !isNaN(amount) && amount > 0) {
                             addWater(parseInt(amount));
                         }
@@ -1434,12 +1099,12 @@
             });
         }
         
-        // Funkcja dodająca wodę
-        async function addWater(amount) {
+        // Add water function
+        function addWater(amount) {
             try {
                 waterData.current += amount;
                 
-                // Dodaj do historii
+                // Add to history
                 const now = new Date();
                 waterData.history.unshift({
                     amount: amount,
@@ -1447,40 +1112,34 @@
                     time: now.toLocaleTimeString()
                 });
                 
-                // Ogranicz historię do 50 ostatnich wpisów
+                // Limit history to 50 entries
                 if (waterData.history.length > 50) {
                     waterData.history = waterData.history.slice(0, 50);
                 }
                 
-                // Sprawdź, czy osiągnięto cel
+                // Check if goal was achieved
                 if (waterData.current >= waterData.target && waterData.current - amount < waterData.target) {
                     waterData.goalAchieved++;
                     waterData.streak++;
                     
-                    // Pokazuj powiadomienie o osiągnięciu celu
-                    handleSuccess('Gratulacje! Osiągnąłeś dzienny cel nawodnienia! 🎉');
+                    // Show goal achievement notification
+                    showGlobalSuccess('Congratulations! You reached your daily hydration goal! 🎉');
                 }
                 
-                // Zapisz dane i zaktualizuj UI
-                await saveData();
+                // Save data and update UI
+                saveData();
                 updateUI();
                 
-                // Sprawdź czy dane zostały zapisane do Supabase czy lokalnie
-                const isSupabaseWorking = isAuthenticated && currentUser && supabase;
-                if (isSupabaseWorking) {
-                    handleSuccess(`Dodano ${amount} ml wody!`);
-                } else {
-                    handleSuccess(`Dodano ${amount} ml wody! (zapisano lokalnie)`);
-                }
+                showGlobalSuccess(`Added ${amount} ml of water!`);
                 
             } catch (error) {
-                handleError(error, 'Dodawanie wody');
+                handleError(error, 'Adding water');
             }
         }
         
-        // Funkcja aktualizująca UI
+        // Update UI function
         function updateUI() {
-            // Aktualizuj okrąg postępu
+            // Update progress circle
             const progress = Math.min(100, (waterData.current / waterData.target) * 100);
             document.getElementById('progress-circle').style.background = 
                 `conic-gradient(var(--primary) ${progress}%, var(--light) 0%)`;
@@ -1488,7 +1147,7 @@
             document.getElementById('progress-value').textContent = `${Math.round(progress)}%`;
             document.getElementById('progress-target').textContent = `${waterData.current} / ${waterData.target} ml`;
             
-            // Aktualizuj historię nawodnień
+            // Update hydration history
             const logList = document.getElementById('hydration-log');
             logList.innerHTML = '';
             
@@ -1502,32 +1161,23 @@
                 logList.appendChild(logItem);
             });
             
-            // Aktualizuj statystyki
+            // Update statistics
             updateStatistics();
         }
         
-        // Funkcja do obliczania dzisiejszego spożycia
-        function calculateTodayIntake() {
-            const today = new Date().toDateString();
-            return waterData.history
-                .filter(entry => new Date(entry.timestamp).toDateString() === today)
-                .reduce((total, entry) => total + entry.amount, 0);
-        }
-        
-        // Funkcja aktualizująca statystyki
+        // Update statistics function
         function updateStatistics() {
             document.getElementById('stat-today').textContent = `${waterData.current} ml`;
             document.getElementById('stat-today-percent').textContent = 
-                `${Math.round((waterData.current / waterData.target) * 100)}% celu`;
+                `${Math.round((waterData.current / waterData.target) * 100)}% of goal`;
             
-            // Tutaj dodaj bardziej zaawansowane obliczenia statystyk
-            // (to jest uproszczona wersja)
+            // Simplified statistics calculation
             document.getElementById('stat-average').textContent = `${Math.round(waterData.current * 0.85)} ml`;
             document.getElementById('stat-goal-days').textContent = waterData.goalAchieved;
-            document.getElementById('stat-streak').textContent = `${waterData.streak} dni`;
+            document.getElementById('stat-streak').textContent = `${waterData.streak} days`;
         }
         
-        // Funkcja do obsługi przypomnień
+        // Reminders function
         function setupReminders() {
             const reminderType = document.getElementById('reminder-type');
             const intervalGroup = document.getElementById('interval-group');
@@ -1554,55 +1204,55 @@
                         value = document.getElementById('reminder-time').value;
                     }
                     
-                    // Sprawdź uprawnienia do powiadomień
+                    // Check notification permissions
                     const hasPermission = await requestNotificationPermission();
                     if (!hasPermission) {
-                        handleError('Brak uprawnień do powiadomień. Sprawdź ustawienia przeglądarki.');
+                        handleError('No notification permissions. Check your browser settings.');
                         return;
                     }
                     
-                    // Wyczyść istniejące przypomnienia
+                    // Clear existing reminders
                     clearNotificationReminders();
                     
-                    // Dodaj nowe przypomnienie
+                    // Add new reminder
                     waterData.reminders.push({ type, value });
                     
-                    // Ustaw nowe powiadomienia
+                    // Set up new notifications
                     setupNotificationReminders();
                     
-                    await saveData();
+                    saveData();
                     updateRemindersList();
                     
-                    handleSuccess('Przypomnienie zostało dodane!');
+                    showGlobalSuccess('Reminder added successfully!');
                     
                 } catch (error) {
-                    handleError(error, 'Dodawanie przypomnienia');
+                    handleError(error, 'Adding reminder');
                 }
             });
             
-            // Obsługa przycisku testowania powiadomień
+            // Test notification button
             document.getElementById('test-notification').addEventListener('click', async function() {
                 try {
                     const hasPermission = await requestNotificationPermission();
                     if (!hasPermission) {
-                        handleError('Brak uprawnień do powiadomień. Sprawdź ustawienia przeglądarki.');
+                        handleError('No notification permissions. Check your browser settings.');
                         return;
                     }
                     
                     showNotification('HydroTrack - Test', {
-                        body: 'To jest testowe powiadomienie! 💧',
+                        body: 'This is a test notification! 💧',
                         tag: 'test-notification'
                     });
                     
-                    handleSuccess('Powiadomienie testowe zostało wysłane!');
+                    showGlobalSuccess('Test notification sent!');
                     
                 } catch (error) {
-                    handleError(error, 'Testowanie powiadomień');
+                    handleError(error, 'Testing notifications');
                 }
             });
         }
         
-        // Funkcja aktualizująca listę przypomnień
+        // Update reminders list function
         function updateRemindersList() {
             const remindersList = document.getElementById('reminders-list');
             remindersList.innerHTML = '';
@@ -1613,28 +1263,28 @@
                 
                 let text;
                 if (reminder.type === 'interval') {
-                    text = `Co ${reminder.value} minut`;
+                    text = `Every ${reminder.value} minutes`;
                 } else {
-                    text = `O ${reminder.value}`;
+                    text = `At ${reminder.value}`;
                 }
                 
                 reminderItem.innerHTML = `
                     <span>${text}</span>
                     <span>
-                        <button class="btn" data-index="${index}">Usuń</button>
+                        <button class="btn" data-index="${index}">Remove</button>
                     </span>
                 `;
                 
                 remindersList.appendChild(reminderItem);
             });
             
-            // Dodaj obsługę przycisku usuwania
+            // Add remove button functionality
             document.querySelectorAll('#reminders-list .btn').forEach(button => {
-                button.addEventListener('click', async function() {
+                button.addEventListener('click', function() {
                     try {
                         const index = parseInt(this.getAttribute('data-index'));
                         
-                        // Wyczyść powiadomienia dla tego przypomnienia
+                        // Clear notifications for this reminder
                         if (waterData.reminders[index].intervalId) {
                             clearInterval(waterData.reminders[index].intervalId);
                         }
@@ -1643,31 +1293,30 @@
                         }
                         
                         waterData.reminders.splice(index, 1);
-                        await saveData();
+                        saveData();
                         updateRemindersList();
                         
-                        handleSuccess('Przypomnienie zostało usunięte!');
+                        showGlobalSuccess('Reminder removed successfully!');
                         
                     } catch (error) {
-                        handleError(error, 'Usuwanie przypomnienia');
+                        handleError(error, 'Removing reminder');
                     }
                 });
             });
         }
         
-        // Funkcja inicjalizująca wykres
+        // Initialize chart function
         function initChart() {
             const ctx = document.getElementById('weekly-chart').getContext('2d');
             
-            // Tutaj dodaj kod do tworzenia wykresu
-            // (to jest uproszczona wersja)
+            // Simplified chart implementation
             ctx.font = '16px Arial';
             ctx.fillStyle = '#3498db';
-            ctx.fillText('Wykres tygodniowego nawodnienia', 50, 150);
-            ctx.fillText('Tutaj pojawią się Twoje statystyki', 60, 180);
+            ctx.fillText('Weekly Hydration Chart', 50, 150);
+            ctx.fillText('Your statistics will appear here', 60, 180);
         }
         
-        // Funkcja pokazująca losową ciekawostkę
+        // Show random fact function
         function showRandomFact() {
             const randomIndex = Math.floor(Math.random() * waterFacts.length);
             document.getElementById('fact-content').textContent = waterFacts[randomIndex];
@@ -1677,195 +1326,7 @@
             });
         }
         
-        // Funkcje uwierzytelniania
-        async function checkAuthStatus() {
-            if (!supabase) {
-                console.log('Supabase nie jest zainicjalizowany, pokazuję sekcję logowania');
-                showAuthSection();
-                return;
-            }
-            
-            try {
-                const { data: { user }, error } = await supabase.auth.getUser();
-                if (error) throw error;
-                
-                if (user) {
-                    currentUser = user;
-                    isAuthenticated = true;
-                    showMainApp();
-                    updateUserInfo();
-                } else {
-                    showAuthSection();
-                }
-            } catch (error) {
-                console.log('Błąd sprawdzania statusu uwierzytelniania, pokazuję sekcję logowania:', error);
-                showAuthSection();
-            }
-        }
-        
-        async function login(email, password) {
-            if (!supabase) {
-                handleError('Supabase nie jest zainicjalizowany');
-                return;
-            }
-            
-            try {
-                showMessage('auth-error', '');
-                showMessage('auth-success', '');
-                
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
-                
-                if (error) throw error;
-                
-                currentUser = data.user;
-                isAuthenticated = true;
-                showMessage('auth-success', 'Pomyślnie zalogowano!');
-                
-                setTimeout(() => {
-                    showMainApp();
-                    updateUserInfo();
-                }, 1000);
-                
-            } catch (error) {
-                handleError(error, 'Logowanie');
-                showMessage('auth-error', 'Błąd logowania: ' + error.message);
-            }
-        }
-        
-        async function register(name, email, password) {
-            if (!supabase) {
-                handleError('Supabase nie jest zainicjalizowany');
-                return;
-            }
-            
-            try {
-                showMessage('auth-error', '');
-                showMessage('auth-success', '');
-                
-                // Sprawdź czy hasła się zgadzają
-                const confirmPassword = document.getElementById('register-confirm').value;
-                if (password !== confirmPassword) {
-                    throw new Error('Hasła nie są identyczne');
-                }
-                
-                const { data, error } = await supabase.auth.signUp({
-                    email: email,
-                    password: password,
-                    options: {
-                        data: {
-                            name: name
-                        }
-                    }
-                });
-                
-                if (error) throw error;
-                
-                showMessage('auth-success', 'Konto zostało utworzone! Sprawdź email w celu potwierdzenia.');
-                
-                // Przełącz na formularz logowania
-                setTimeout(() => {
-                    switchAuthForm('login');
-                }, 2000);
-                
-            } catch (error) {
-                handleError(error, 'Rejestracja');
-                showMessage('auth-error', 'Błąd rejestracji: ' + error.message);
-            }
-        }
-        
-        async function logout() {
-            if (!supabase) {
-                // Jeśli Supabase nie jest zainicjalizowany, po prostu wyczyść stan lokalny
-                currentUser = null;
-                isAuthenticated = false;
-                showAuthSection();
-                clearUserInfo();
-                return;
-            }
-            
-            try {
-                const { error } = await supabase.auth.signOut();
-                if (error) throw error;
-                
-                currentUser = null;
-                isAuthenticated = false;
-                showAuthSection();
-                clearUserInfo();
-                
-            } catch (error) {
-                handleError(error, 'Wylogowanie');
-            }
-        }
-        
-        function showAuthSection() {
-            document.getElementById('auth').classList.add('active');
-            document.getElementById('dashboard').classList.remove('active');
-            document.getElementById('notifications').classList.remove('active');
-            document.getElementById('statistics').classList.remove('active');
-            document.getElementById('help').classList.remove('active');
-            document.getElementById('user-info').classList.remove('active');
-            
-            // Usuń aktywną klasę z nawigacji
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // Jeśli Supabase nie jest dostępny, pokaż informację o trybie offline
-            if (!supabase) {
-                showGlobalError('Aplikacja działa w trybie offline. Dane będą zapisywane lokalnie.', 8000);
-            }
-        }
-        
-        function showMainApp() {
-            document.getElementById('auth').classList.remove('active');
-            document.getElementById('dashboard').classList.add('active');
-            
-            // Pokaż informacje o użytkowniku tylko jeśli jest zalogowany
-            if (isAuthenticated && currentUser) {
-                document.getElementById('user-info').classList.add('active');
-            } else {
-                document.getElementById('user-info').classList.remove('active');
-            }
-            
-            // Ustaw aktywną nawigację na dashboard
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            document.querySelector('[data-target="dashboard"]').classList.add('active');
-            
-            // Załaduj dane użytkownika
-            loadData();
-        }
-        
-        function updateUserInfo() {
-            if (currentUser) {
-                const name = currentUser.user_metadata?.name || currentUser.email?.split('@')[0] || 'Użytkownik';
-                const initial = name.charAt(0).toUpperCase();
-                
-                document.getElementById('user-name').textContent = name;
-                document.getElementById('user-avatar').textContent = initial;
-            }
-        }
-        
-        function clearUserInfo() {
-            document.getElementById('user-name').textContent = 'Użytkownik';
-            document.getElementById('user-avatar').textContent = 'U';
-        }
-        
-        function showMessage(elementId, message) {
-            const element = document.getElementById(elementId);
-            if (message) {
-                element.textContent = message;
-                element.classList.add('active');
-            } else {
-                element.classList.remove('active');
-            }
-        }
-        
-        // Globalne funkcje obsługi błędów
+        // Global error handling functions
         function showGlobalError(message, duration = 5000) {
             const errorElement = document.getElementById('global-error');
             errorElement.textContent = message;
@@ -1887,9 +1348,9 @@
         }
         
         function handleError(error, context = '') {
-            console.error(`Błąd ${context}:`, error);
+            console.error(`Error ${context}:`, error);
             
-            let errorMessage = 'Wystąpił nieoczekiwany błąd';
+            let errorMessage = 'An unexpected error occurred';
             
             if (error.message) {
                 errorMessage = error.message;
@@ -1904,12 +1365,7 @@
             showGlobalError(errorMessage);
         }
         
-        function handleSuccess(message, context = '') {
-            console.log(`Sukces ${context}:`, message);
-            showGlobalSuccess(message);
-        }
-        
-        // Funkcje powiadomień przeglądarki
+        // Browser notification functions
         async function requestNotificationPermission() {
             if ('Notification' in window) {
                 const permission = await Notification.requestPermission();
@@ -1926,7 +1382,7 @@
                     ...options
                 });
                 
-                // Automatycznie zamknij powiadomienie po 5 sekundach
+                // Auto-close notification after 5 seconds
                 setTimeout(() => {
                     notification.close();
                 }, 5000);
@@ -1939,15 +1395,15 @@
         function setupNotificationReminders() {
             waterData.reminders.forEach(reminder => {
                 if (reminder.type === 'interval') {
-                    const interval = parseInt(reminder.value) * 60 * 1000; // konwersja na milisekundy
+                    const interval = parseInt(reminder.value) * 60 * 1000; // Convert to milliseconds
                     const reminderId = setInterval(() => {
-                        showNotification('HydroTrack - Przypomnienie', {
-                            body: 'Czas na szklankę wody! 💧',
+                        showNotification('HydroTrack - Reminder', {
+                            body: 'Time for a glass of water! 💧',
                             tag: 'water-reminder'
                         });
                     }, interval);
                     
-                    // Zapisz ID interwału do przypomnienia
+                    // Save interval ID to reminder
                     reminder.intervalId = reminderId;
                 } else if (reminder.type === 'specific') {
                     const [hours, minutes] = reminder.value.split(':');
@@ -1955,7 +1411,7 @@
                     const reminderTime = new Date();
                     reminderTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
                     
-                    // Jeśli czas już minął dzisiaj, ustaw na jutro
+                    // If time has already passed today, set for tomorrow
                     if (reminderTime <= now) {
                         reminderTime.setDate(reminderTime.getDate() + 1);
                     }
@@ -1963,19 +1419,19 @@
                     const timeUntilReminder = reminderTime.getTime() - now.getTime();
                     
                     const timeoutId = setTimeout(() => {
-                        showNotification('HydroTrack - Przypomnienie', {
-                            body: 'Czas na szklankę wody! 💧',
+                        showNotification('HydroTrack - Reminder', {
+                            body: 'Time for a glass of water! 💧',
                             tag: 'water-reminder'
                         });
                         
-                        // Ustaw następne przypomnienie na jutro
+                        // Set next reminder for tomorrow
                         const nextReminder = new Date();
                         nextReminder.setDate(nextReminder.getDate() + 1);
                         nextReminder.setHours(parseInt(hours), parseInt(minutes), 0, 0);
                         
                         const nextTimeout = setTimeout(() => {
-                            showNotification('HydroTrack - Przypomnienie', {
-                                body: 'Czas na szklankę wody! 💧',
+                            showNotification('HydroTrack - Reminder', {
+                                body: 'Time for a glass of water! 💧',
                                 tag: 'water-reminder'
                             });
                         }, nextReminder.getTime() - Date.now());
@@ -2001,39 +1457,39 @@
             });
         }
         
-        // Funkcja obsługi modala ustawiania celu
+        // Goal modal function
         function setupGoalModal() {
             const goalModal = document.getElementById('goal-modal');
             const closeModal = document.getElementById('close-goal-modal');
             const progressTarget = document.getElementById('progress-target');
             
-            // Obsługa kliknięcia na cel nawodnienia
+            // Click handler for hydration goal
             progressTarget.addEventListener('click', function() {
                 goalModal.classList.add('active');
-                // Ustaw aktualny cel w formularzu ręcznym
+                // Set current goal in manual form
                 document.getElementById('manual-goal').value = waterData.target;
             });
             
-            // Obsługa zamykania modala
+            // Close modal handler
             closeModal.addEventListener('click', function() {
                 goalModal.classList.remove('active');
             });
             
-            // Zamykanie modala po kliknięciu w tło
+            // Close modal when clicking on background
             goalModal.addEventListener('click', function(e) {
                 if (e.target === goalModal) {
                     goalModal.classList.remove('active');
                 }
             });
             
-            // Zamykanie modala klawiszem ESC
+            // Close modal with ESC key
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && goalModal.classList.contains('active')) {
                     goalModal.classList.remove('active');
                 }
             });
             
-            // Obsługa przełączania zakładek
+            // Tab switching
             document.querySelectorAll('.goal-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     const formType = this.getAttribute('data-form');
@@ -2041,23 +1497,23 @@
                 });
             });
             
-            // Obsługa ręcznego ustawiania celu
+            // Manual goal setting
             document.getElementById('set-manual-goal').addEventListener('click', function() {
                 const newGoal = parseInt(document.getElementById('manual-goal').value);
                 if (newGoal >= 500 && newGoal <= 5000) {
                     setWaterGoal(newGoal);
                     goalModal.classList.remove('active');
                 } else {
-                    handleError('Cel musi być między 500 a 5000 ml');
+                    handleError('Goal must be between 500 and 5000 ml');
                 }
             });
             
-            // Obsługa obliczania celu
+            // Goal calculation
             document.getElementById('calculate-goal').addEventListener('click', function() {
                 calculateWaterGoal();
             });
             
-            // Obsługa ustawiania obliczonego celu
+            // Set calculated goal
             document.getElementById('set-calculated-goal').addEventListener('click', function() {
                 const calculatedAmount = parseInt(document.getElementById('calculated-amount').textContent);
                 setWaterGoal(calculatedAmount);
@@ -2066,13 +1522,13 @@
         }
         
         function switchGoalForm(formType) {
-            // Przełącz zakładki
+            // Switch tabs
             document.querySelectorAll('.goal-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
             document.querySelector(`[data-form="${formType}"]`).classList.add('active');
             
-            // Przełącz formularze
+            // Switch forms
             document.querySelectorAll('.goal-form').forEach(form => {
                 form.classList.remove('active');
             });
@@ -2085,21 +1541,21 @@
             const activityLevel = document.getElementById('activity-level').value;
             
             if (!weight || !age) {
-                handleError('Wprowadź wagę i wiek');
+                handleError('Please enter weight and age');
                 return;
             }
             
-            // Podstawowe obliczenie: 35ml na kg masy ciała
+            // Basic calculation: 35ml per kg of body weight
             let baseAmount = weight * 35;
             
-            // Dostosowanie do wieku
+            // Age adjustment
             if (age < 18) {
-                baseAmount *= 0.9; // Młodzież potrzebuje mniej wody
+                baseAmount *= 0.9; // Teens need less water
             } else if (age > 65) {
-                baseAmount *= 0.8; // Osoby starsze potrzebują mniej wody
+                baseAmount *= 0.8; // Seniors need less water
             }
             
-            // Dostosowanie do poziomu aktywności
+            // Activity level adjustment
             const activityMultipliers = {
                 'low': 1.0,
                 'moderate': 1.2,
@@ -2109,10 +1565,10 @@
             
             baseAmount *= activityMultipliers[activityLevel];
             
-            // Zaokrąglij do najbliższej 50ml
+            // Round to nearest 50ml
             const finalAmount = Math.round(baseAmount / 50) * 50;
             
-            // Pokaż wynik
+            // Show result
             document.getElementById('calculated-amount').textContent = `${finalAmount} ml`;
             document.getElementById('calculation-result').style.display = 'block';
             document.getElementById('set-calculated-goal').style.display = 'block';
@@ -2122,28 +1578,10 @@
             waterData.target = newGoal;
             updateUI();
             saveData();
-            handleSuccess(`Cel nawodnienia ustawiony na ${newGoal} ml!`);
+            showGlobalSuccess(`Hydration goal set to ${newGoal} ml!`);
         }
         
-        function switchAuthForm(formType) {
-            // Przełącz zakładki
-            document.querySelectorAll('.auth-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelector(`[data-form="${formType}"]`).classList.add('active');
-            
-            // Przełącz formularze
-            document.querySelectorAll('.auth-form').forEach(form => {
-                form.classList.remove('active');
-            });
-            document.getElementById(`${formType}-form`).classList.add('active');
-            
-            // Wyczyść komunikaty
-            showMessage('auth-error', '');
-            showMessage('auth-success', '');
-        }
-        
-        // Funkcja obsługi FAQ
+        // FAQ function
         function setupFAQ() {
             const faqQuestions = document.querySelectorAll('.faq-question');
             
@@ -2152,7 +1590,7 @@
                     const answer = this.nextElementSibling;
                     const icon = this.querySelector('i');
                     
-                    // Zamknij wszystkie inne FAQ
+                    // Close all other FAQs
                     faqQuestions.forEach(otherQuestion => {
                         if (otherQuestion !== this) {
                             otherQuestion.classList.remove('active');
@@ -2160,64 +1598,12 @@
                         }
                     });
                     
-                    // Przełącz aktualne FAQ
+                    // Toggle current FAQ
                     this.classList.toggle('active');
                     answer.classList.toggle('active');
                 });
             });
         }
-        
-        function setupAuth() {
-            // Obsługa przełączania zakładek
-            document.querySelectorAll('.auth-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const formType = this.getAttribute('data-form');
-                    switchAuthForm(formType);
-                });
-            });
-            
-            // Obsługa formularza logowania
-            document.getElementById('login-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-                login(email, password);
-            });
-            
-            // Obsługa formularza rejestracji
-            document.getElementById('register-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const name = document.getElementById('register-name').value;
-                const email = document.getElementById('register-email').value;
-                const password = document.getElementById('register-password').value;
-                register(name, email, password);
-            });
-            
-            // Obsługa wylogowania
-            document.getElementById('logout-btn').addEventListener('click', logout);
-            
-            // Obsługa kontynuacji bez logowania
-            document.getElementById('continue-offline').addEventListener('click', function() {
-                // Ustaw tryb offline
-                currentUser = null;
-                isAuthenticated = false;
-                
-                // Załaduj dane z localStorage
-                const savedData = localStorage.getItem('hydrotrack_data');
-                if (savedData) {
-                    waterData = JSON.parse(savedData);
-                }
-                
-                // Pokaż główną aplikację
-                showMainApp();
-                
-                // Pokaż komunikat o trybie offline
-                showGlobalSuccess('Kontynuujesz w trybie offline. Dane będą zapisywane lokalnie.', 5000);
-            });
-        }
     </script>
-
-    <!-- Supabase SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </body>
 </html>
