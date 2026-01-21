@@ -211,52 +211,40 @@ footer {
 /* Partner Ad Styles */
 .partner-ad {
     margin: 28px auto 18px auto;
-    padding: 16px 24px;
-    background: linear-gradient(90deg, #f8fafc 80%, #e0e7ef 100%);
+    padding: 0; /* Usunięto padding, aby obrazek zajmował cały obszar */
+    background: none; /* Usunięto tło, aby było tylko zdjęcie */
     border-radius: 18px;
     box-shadow: 0 2px 12px 0 rgba(60,60,90,0.07);
-    display: flex;
-    align-items: center;
+    display: block;
     max-width: 420px;
     transition: box-shadow 0.2s;
-    border: 1px solid #e6e6e6;
+    border: none; /* Usunięto obramowanie */
 }
 .partner-ad:hover {
     box-shadow: 0 4px 24px 0 rgba(60,60,90,0.13);
 }
 .partner-ad-link {
-    display: flex;
-    align-items: center;
+    display: block; /* Link zajmuje cały banner */
     text-decoration: none;
     color: #2d3748;
     width: 100%;
+    height: 100%;
 }
 .partner-ad-img {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    margin-right: 18px;
+    width: 100%; /* Obrazek zajmuje całą szerokość */
+    height: auto; /* Zachowuje proporcje */
+    border-radius: 18px; /* Zachowuje zaokrąglenie */
     box-shadow: 0 1px 6px 0 rgba(60,60,90,0.10);
     background: #fff;
-}
-.partner-ad-text {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.08rem;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    color: #2d3748;
-    transition: color 0.2s;
-}
-.partner-ad-link:hover .partner-ad-text {
-    color: #1a202c;
+    display: block;
 }
 @media (max-width: 600px) {
     .partner-ad {
-        flex-direction: column;
-        padding: 12px 8px;
+        flex-direction: column; /* Niepotrzebne, ale zostawione jeśli potrzebne */
+        padding: 0; /* Zachowane jako 0 */
         max-width: 98vw;
     }
     .partner-ad-img {
-        margin: 0 0 10px 0;
+        margin: 0; /* Usunięto margines */
     }
 }
