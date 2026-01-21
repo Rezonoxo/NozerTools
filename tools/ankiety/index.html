@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ustalmy sobie - Ankiety</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            padding-bottom: 50px;
+            min-height: 100vh;
+            background-image: radial-gradient(#e0e7ff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -150px;
+            right: -100px;
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            bottom: -100px;
+            left: -50px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .stats-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 0.3rem;
+        }
+
+        .questions-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            animation: fadeInUp 0.6s ease;
+            animation-fill-mode: both;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .question-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-light);
+        }
+
+        .question-header {
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            color: white;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .question-number {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-right: 40px;
+            line-height: 1.3;
+        }
+
+        .question-preview {
+            padding: 1.5rem;
+            color: var(--gray);
+            font-size: 0.95rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question-stats {
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            background: #f8f9fe;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .question-stats i {
+            margin-right: 5px;
+            color: var(--primary);
+        }
+
+        .results-container {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-5px);
+        }
+
+        .results-title {
+            font-size: 1.8rem;
+            color: var(--dark);
+        }
+
+        .results-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .results-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .result-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-label {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .result-percentage {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .result-bar {
+            height: 40px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .result-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary-light), var(--primary));
+            border-radius: 8px;
+            width: 0%;
+            transition: width 1.5s ease;
+            display: flex;
+            align-items: center;
+            padding-left: 15px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .result-count {
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            color: var(--gray);
+        }
+
+        .result-stat {
+            font-style: italic;
+            background: #f8f9fe;
+            padding: 0.8rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            margin-top: 0.5rem;
+        }
+
+        .result-stat i {
+            color: var(--accent);
+            margin-right: 8px;
+        }
+
+        .total-votes {
+            background: linear-gradient(135deg, #f8f9fe, #e9ecef);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            grid-column: 1 / -1;
+        }
+
+        .total-votes h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .total-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--secondary);
+            line-height: 1;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .footer-note {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            background: #ffe6e6;
+            border: 1px solid #ff9999;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: #cc0000;
+            margin: 2rem 0;
+        }
+
+        .error-message i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Animacje */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsywność */
+        @media (max-width: 768px) {
+            .questions-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-content {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+            
+            .stat-item {
+                min-width: 100%;
+            }
+        }
+
+        /* Indeksy dla opóźnionych animacji kart */
+        .question-card:nth-child(1) { animation-delay: 0.1s; }
+        .question-card:nth-child(2) { animation-delay: 0.2s; }
+        .question-card:nth-child(3) { animation-delay: 0.3s; }
+        .question-card:nth-child(4) { animation-delay: 0.4s; }
+        .question-card:nth-child(5) { animation-delay: 0.5s; }
+        .question-card:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-poll"></i> Ustalmy sobie</h1>
+        <p class="subtitle">Zobacz, jak odpowiedzieli inni na różne dziwne pytania. Kliknij na pytanie, aby zobaczyć szczegółowe wyniki.</p>
+    </header>
+
+    <div class="container">
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="total-questions">0</div>
+                <div class="stat-label">PYTAŃ W ANKIECIE</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="total-votes-count">0</div>
+                <div class="stat-label">ŁĄCZNA LICZBA GŁOSÓW</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="avg-participants">0</div>
+                <div class="stat-label">ŚREDNIO NA PYTANIE</div>
+            </div>
+        </div>
+
+        <div id="content-area">
+            <!-- Tutaj zostaną załadowane pytania lub komunikaty o błędzie -->
+        </div>
+
+        <div class="results-container" id="results-container">
+            <div class="results-header">
+                <button class="back-btn" id="back-btn">
+                    <i class="fas fa-arrow-left"></i> Powrót do pytań
+                </button>
+                <h2 class="results-title" id="results-title">Wyniki ankiety</h2>
+            </div>
+
+            <div class="results-content">
+                <div class="results-chart" id="results-chart">
+                    <!-- Wyniki będą wstawiane tutaj przez JavaScript -->
+                </div>
+                
+                <div class="total-votes">
+                    <h3>Łączna liczba głosów w tej ankiecie</h3>
+                    <div class="total-number" id="question-total-votes">0</div>
+                    <p id="votes-description"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Strona ankietowa • Dane są ładowane z pliku data.json</p>
+        <p class="footer-note">Aby edytować pytania i wyniki, zaktualizuj plik <code>data.json</code> w tym samym folderze</p>
+    </footer>
+
+    <script>
+        // Zmienna globalna dla danych ankiet
+        let surveyData = null;
+
+        // Elementy DOM
+        const contentArea = document.getElementById('content-area');
+        const questionsContainer = document.createElement('div');
+        questionsContainer.className = 'questions-container';
+        questionsContainer.id = 'questions-container';
+        
+        const resultsContainer = document.getElementById('results-container');
+        const resultsChart = document.getElementById('results-chart');
+        const resultsTitle = document.getElementById('results-title');
+        const questionTotalVotes = document.getElementById('question-total-votes');
+        const votesDescription = document.getElementById('votes-description');
+        const backBtn = document.getElementById('back-btn');
+        const totalQuestionsElement = document.getElementById('total-questions');
+        const totalVotesCountElement = document.getElementById('total-votes-count');
+        const avgParticipantsElement = document.getElementById('avg-participants');
+
+        // Inicjalizacja strony
+        document.addEventListener('DOMContentLoaded', function() {
+            initPage();
+            loadSurveyData();
+        });
+
+        // Funkcja inicjalizująca
+        function initPage() {
+            // Ukryj kontener wyników na starcie
+            resultsContainer.style.display = 'none';
+            
+            // Obsługa przycisku powrotu
+            backBtn.addEventListener('click', function() {
+                questionsContainer.style.display = 'grid';
+                resultsContainer.style.display = 'none';
+            });
+        }
+
+        // Funkcja do ładowania danych z pliku JSON
+        async function loadSurveyData() {
+            // Pokaż loader podczas ładowania
+            contentArea.innerHTML = `
+                <div class="loader">
+                    <div class="spinner"></div>
+                    <h3>Ładowanie ankiet...</h3>
+                    <p>Trwa wczytywanie danych z pliku data.json</p>
+                </div>
+            `;
+            
+            try {
+                const response = await fetch('data.json');
+                if (!response.ok) {
+                    throw new Error(`Błąd HTTP: ${response.status}`);
+                }
+                
+                surveyData = await response.json();
+                
+                // Sprawdź strukturę danych
+                if (!surveyData.questions || !Array.isArray(surveyData.questions)) {
+                    throw new Error('Nieprawidłowa struktura pliku JSON. Brak tablicy "questions".');
+                }
+                
+                // Wyświetl pytania
+                displayQuestions();
+                updateStats();
+                
+            } catch (error) {
+                console.error('Błąd ładowania danych:', error);
+                showErrorMessage(error);
+            }
+        }
+
+        // Wyświetlanie pytań
+        function displayQuestions() {
+            questionsContainer.innerHTML = '';
+            
+            // Dodaj kontener pytań do obszaru treści
+            contentArea.innerHTML = '';
+            contentArea.appendChild(questionsContainer);
+            
+            surveyData.questions.forEach((question, index) => {
+                // Oblicz najpopularniejszą opcję
+                let mostVotedOption = null;
+                let maxVotes = 0;
+                
+                question.options.forEach(option => {
+                    if (option.votes > maxVotes) {
+                        maxVotes = option.votes;
+                        mostVotedOption = option;
+                    }
+                });
+                
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                questionCard.dataset.id = question.id;
+                
+                questionCard.innerHTML = `
+                    <div class="question-header">
+                        <div class="question-number">${index + 1}</div>
+                        <div class="question-text">${question.question}</div>
+                    </div>
+                    <div class="question-preview">
+                        ${mostVotedOption ? `Najpopularniejsza odpowiedź: <strong>${mostVotedOption.text}</strong>` : 'Brak danych o głosach'}
+                    </div>
+                    <div class="question-stats">
+                        <span><i class="fas fa-users"></i> ${question.totalVotes ? question.totalVotes.toLocaleString() : '0'} głosów</span>
+                        <span><i class="fas fa-percentage"></i> ${mostVotedOption && question.totalVotes > 0 ? Math.round((mostVotedOption.votes / question.totalVotes) * 100) : 0}% wybrało tę opcję</span>
+                    </div>
+                `;
+                
+                questionCard.addEventListener('click', function() {
+                    showResults(question.id);
+                });
+                
+                questionsContainer.appendChild(questionCard);
+            });
+        }
+
+        // Wyświetlanie wyników dla wybranego pytania
+        function showResults(questionId) {
+            const question = surveyData.questions.find(q => q.id === questionId);
+            if (!question) return;
+            
+            // Ukryj pytania i pokaż wyniki
+            questionsContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+            
+            // Ustaw tytuł
+            resultsTitle.textContent = question.question;
+            questionTotalVotes.textContent = question.totalVotes ? question.totalVotes.toLocaleString() : '0';
+            
+            // Generuj opis głosów
+            if (question.totalVotes > 0 && question.options.length > 0) {
+                const avgPerOption = Math.round(question.totalVotes / question.options.length);
+                votesDescription.textContent = `Średnio ${avgPerOption.toLocaleString()} głosów na opcję`;
+            } else {
+                votesDescription.textContent = 'Brak danych o głosach';
+            }
+            
+            // Wyczyść i wypełnij wykres
+            resultsChart.innerHTML = '';
+            
+            // Sprawdź czy są jakieś głosy
+            if (!question.totalVotes || question.totalVotes === 0) {
+                resultsChart.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Brak danych o głosach dla tego pytania</h3>
+                        <p>Sprawdź plik data.json i upewnij się, że dla tego pytania są zdefiniowane głosy.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sortuj opcje według liczby głosów (malejąco)
+            const sortedOptions = [...question.options].sort((a, b) => b.votes - a.votes);
+            
+            sortedOptions.forEach(option => {
+                const percentage = Math.round((option.votes / question.totalVotes) * 100);
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item';
+                
+                // Generuj statystykę "co X osoba"
+                let statText = '';
+                if (percentage >= 50) {
+                    statText = `Większość ankietowanych (${percentage}%) zgadza się z tym stwierdzeniem`;
+                } else if (percentage >= 25) {
+                    const everyX = Math.round(100 / percentage);
+                    statText = `Oznacza to, że mniej więcej co ${everyX}. osoba wybrała tę opcję`;
+                } else if (percentage >= 10) {
+                    const everyX = Math.round(100 / percentage);
+                    statText = `Tylko co ${everyX}. osoba wybrała tę opcję`;
+                } else if (percentage > 0) {
+                    statText = `Niewielki odsetek ankietowanych (${percentage}%) wybrał tę opcję`;
+                } else {
+                    statText = `Nikt nie wybrał tej opcji (0%)`;
+                }
+                
+                resultItem.innerHTML = `
+                    <div class="result-header">
+                        <div class="result-label">${option.text}</div>
+                        <div class="result-percentage">${percentage}%</div>
+                    </div>
+                    <div class="result-bar">
+                        <div class="result-fill" style="width: ${percentage}%">
+                            ${percentage}%
+                        </div>
+                    </div>
+                    <div class="result-count">
+                        <strong>${option.votes.toLocaleString()}</strong> na ${question.totalVotes.toLocaleString()} głosów
+                    </div>
+                    <div class="result-stat">
+                        <i class="fas fa-chart-pie"></i> ${statText}
+                    </div>
+                `;
+                
+                resultsChart.appendChild(resultItem);
+            });
+            
+            // Animacja pasków po krótkim opóźnieniu
+            setTimeout(() => {
+                const fills = document.querySelectorAll('.result-fill');
+                fills.forEach(fill => {
+                    const width = fill.style.width;
+                    fill.style.width = '0%';
+                    setTimeout(() => {
+                        fill.style.width = width;
+                    }, 100);
+                });
+            }, 300);
+        }
+
+        // Aktualizacja statystyk
+        function updateStats() {
+            if (!surveyData) return;
+            
+            const totalQuestions = surveyData.questions.length;
+            
+            // Oblicz całkowitą liczbę głosów (suma totalVotes z wszystkich pytań)
+            let totalVotesCount = 0;
+            if (surveyData.totalParticipants) {
+                totalVotesCount = surveyData.totalParticipants;
+            } else {
+                // Jeśli nie ma totalParticipants, oblicz sumę
+                surveyData.questions.forEach(q => {
+                    if (q.totalVotes) totalVotesCount += q.totalVotes;
+                });
+            }
+            
+            const avgParticipants = Math.round(totalVotesCount / totalQuestions);
+            
+            totalQuestionsElement.textContent = totalQuestions;
+            totalVotesCountElement.textContent = totalVotesCount.toLocaleString();
+            avgParticipantsElement.textContent = avgParticipants.toLocaleString();
+        }
+
+        // Wyświetlanie komunikatu o błędzie
+        function showErrorMessage(error) {
+            contentArea.innerHTML = `
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3>Nie udało się załadować ankiet</h3>
+                    <p>${error.message || 'Wystąpił błąd podczas ładowania danych.'}</p>
+                    <p>Upewnij się, że plik <code>data.json</code> znajduje się w tym samym folderze co strona i ma poprawną strukturę.</p>
+                    <button id="retry-btn" class="back-btn" style="margin-top: 1rem;">
+                        <i class="fas fa-redo"></i> Spróbuj ponownie
+                    </button>
+                </div>
+            `;
+            
+            // Dodaj obsługę przycisku ponawiania
+            document.getElementById('retry-btn').addEventListener('click', loadSurveyData);
+        }
+    </script>
+</body>
+</html>

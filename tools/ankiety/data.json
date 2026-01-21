@@ -1,0 +1,39 @@
+{
+  "title": "Let's Settle This - Ankieta",
+  "description": "Zobacz jak odpowiedzieli inni na kontrowersyjne pytania",
+  "totalParticipants": 15000,
+  "questions": [
+    { 
+      "id": 1,
+      "question": "Twoje pierwsze pytanie ankietowe?",
+      "options": [
+        {"text": "Opcja odpowiedzi A", "votes": 5000},
+        {"text": "Opcja odpowiedzi B", "votes": 7000},
+        {"text": "Opcja odpowiedzi C", "votes": 2000},
+        {"text": "Opcja odpowiedzi D", "votes": 1000}
+      ],
+      "totalVotes": 15000
+    },
+    {
+      "id": 2,
+      "question": "Twoje drugie pytanie ankietowe?",
+      "options": [
+        {"text": "Tak", "votes": 9000},
+        {"text": "Nie", "votes": 4000},
+        {"text": "Nie wiem", "votes": 2000}
+      ],
+      "totalVotes": 15000
+    },
+    {
+      "id": 3,
+      "question": "Twoje trzecie pytanie?",
+      "options": [
+        {"text": "Opcja 1", "votes": 3000},
+        {"text": "Opcja 2", "votes": 6000},
+        {"text": "Opcja 3", "votes": 4000},
+        {"text": "Opcja 4", "votes": 2000}
+      ],
+      "totalVotes": 15000
+    }
+  ]
+}
